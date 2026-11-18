@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import UserProfile from "./UserProfile";
 
 const MobileNav = ({
@@ -10,101 +12,123 @@ const MobileNav = ({
     setIsMenuOpen,
     handleSignOut,
 }: any) => {
+    const pathname = usePathname();
+
+    const closeMenu = () => setIsMenuOpen(false);
+
+    const getLinkClass = (isActive: boolean) =>
+        `font - medium transition ${isActive
+            ? "font-semibold text-primary"
+            : "text-base-content hover:text-primary"
+        } `;
+
     return (
         <div className="navbar-end md:hidden">
-            {/* Mobile Theme Toggle */}
+            {/* Theme Toggle */}
             <button
                 onClick={handleThemeChange}
-                className="text-left text-base-content"
+                className="btn btn-ghost btn-circle text-base-content"
+                aria-label="Toggle theme"
             >
-                {isDark ? "☀️" : "🌙"}
+                {isDark ? (
+                    <Sun className="h-5 w-5" />
+                ) : (
+                    <Moon className="h-5 w-5" />
+                )}
             </button>
 
-            {/* Mobile Menu Button */}
+            {/* Menu Button */}
             <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="btn btn-ghost btn-circle text-xl"
+                className="btn btn-ghost btn-circle text-base-content"
                 aria-label="Toggle menu"
             >
-                ☰
+                {isMenuOpen ? (
+                    <X className="h-6 w-6" />
+                ) : (
+                    <Menu className="h-6 w-6" />
+                )}
             </button>
 
-            {/* Mobile Navigation */}
+            {/* Mobile Menu */}
             {isMenuOpen && (
                 <>
-                    {/* Outside Click */}
                     <button
-                        onClick={() => setIsMenuOpen(false)}
+                        onClick={closeMenu}
                         className="fixed inset-0 z-40 cursor-default"
                         aria-label="Close menu"
                     />
 
-                    {/* Mobile Menu */}
-                    <div className="absolute left-0 top-full z-50 w-full border-t border-base-300 bg-base-100 p-4 md:hidden">
+                    <div className="absolute left-0 top-full z-50 w-full border-t border-base-300 bg-base-100 p-5 shadow-lg">
                         <div className="flex flex-col gap-4">
-
-                            {/* Public Navigation Links */}
                             <Link
                                 href="/"
-                                onClick={() => setIsMenuOpen(false)}
+                                onClick={closeMenu}
+                                className={getLinkClass(pathname === "/")}
                             >
                                 Home
                             </Link>
 
                             <Link
                                 href="/equipment"
-                                onClick={() => setIsMenuOpen(false)}
+                                onClick={closeMenu}
+                                className={getLinkClass(pathname.startsWith("/equipment"))}
                             >
                                 All Equipment
                             </Link>
 
                             <Link
                                 href="/how-it-works"
-                                onClick={() => setIsMenuOpen(false)}
+                                onClick={closeMenu}
+                                className={getLinkClass(pathname === "/how-it-works")}
                             >
                                 How It Works
                             </Link>
 
                             <Link
                                 href="/about"
-                                onClick={() => setIsMenuOpen(false)}
+                                onClick={closeMenu}
+                                className={getLinkClass(pathname === "/about")}
                             >
                                 About
                             </Link>
 
                             <Link
                                 href="/contact"
-                                onClick={() => setIsMenuOpen(false)}
+                                onClick={closeMenu}
+                                className={getLinkClass(pathname === "/contact")}
                             >
                                 Contact
                             </Link>
 
-                            {/* Authentication */}
+                            <div className="my-1 border-t border-base-300" />
+
                             {isPending ? (
                                 <div className="h-5 w-24 animate-pulse rounded bg-base-300" />
                             ) : !session ? (
-                                <>
+                                <div className="flex flex-col gap-4">
                                     <Link
                                         href="/sign-in"
-                                        onClick={() => setIsMenuOpen(false)}
+                                        onClick={closeMenu}
+                                        className="font-semibold text-base-content hover:text-primary"
                                     >
                                         Login
                                     </Link>
 
                                     <Link
                                         href="/sign-up"
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="font-semibold text-accent"
+                                        onClick={closeMenu}
+                                        className="btn border-none bg-primary text-primary-content"
                                     >
-                                        Register
+                                        Get Started
                                     </Link>
-                                </>
+                                </div>
                             ) : (
                                 <>
                                     <Link
                                         href="/dashboard"
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="font-semibold text-accent"
+                                        onClick={closeMenu}
+                                        className={getLinkClass(pathname.startsWith("/dashboard"))}
                                     >
                                         Dashboard
                                     </Link>
@@ -113,7 +137,7 @@ const MobileNav = ({
                                         user={session.user}
                                         isOpen={false}
                                         onToggle={() => { }}
-                                        onClose={() => setIsMenuOpen(false)}
+                                        onClose={closeMenu}
                                         onSignOut={handleSignOut}
                                         variant="mobile"
                                     />

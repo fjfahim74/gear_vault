@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { HandCoins } from "lucide-react";
+import { Package } from "lucide-react";
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
 
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
+import { Cog } from "lucide-react";
 
 const Navbar = () => {
     const router = useRouter();
@@ -20,29 +21,25 @@ const Navbar = () => {
     const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem("eventify-theme");
+        const savedTheme = localStorage.getItem("gearvault-theme");
 
-        const theme = savedTheme === "dark" ? "dark" : "light";
+        const theme = savedTheme === "gearvault-dark"
+            ? "gearvault-dark"
+            : "gearvault-light";
 
         document.documentElement.setAttribute("data-theme", theme);
 
-        setIsDark(theme === "dark");
+        setIsDark(theme === "gearvault-dark");
     }, []);
 
     const handleThemeChange = () => {
         const newTheme = !isDark;
+        const theme = newTheme ? "gearvault-dark" : "gearvault-light";
 
         setIsDark(newTheme);
 
-        document.documentElement.setAttribute(
-            "data-theme",
-            newTheme ? "dark" : "light"
-        );
-
-        localStorage.setItem(
-            "eventify-theme",
-            newTheme ? "dark" : "light"
-        );
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("gearvault-theme", theme);
     };
 
     const handleSignOut = async () => {
@@ -71,16 +68,14 @@ const Navbar = () => {
             <div className="navbar mx-auto max-w-7xl px-4">
 
                 {/* Logo */}
-                <div className="navbar-start">
-                    <Link href="/" className="flex items-center gap-2.5 group">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-700 text-white shadow-md transition-transform group-hover:scale-105">
-                            <HandCoins className="h-6 w-6" />
-                        </div>
+                <div className="navbar-start">     <Link href="/" className="group flex items-center gap-2.5">         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-content shadow-sm transition-transform group-hover:scale-105">
+                    <Cog className="h-6 w-6" strokeWidth={2.2} />       </div>
 
-                        <span className="text-xl font-bold tracking-tight text-green-800">
-                            Eventify
-                        </span>
-                    </Link>
+                    <span className="text-xl font-extrabold tracking-tight text-base-content">
+                        GearVault
+                    </span>
+                </Link>
+
                 </div>
 
                 {/* Desktop Navigation */}
