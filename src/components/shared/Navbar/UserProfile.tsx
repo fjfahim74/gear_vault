@@ -9,12 +9,30 @@ type UserProfileProps = {
         name: string;
         email: string;
         image?: string | null;
+        role: "Customer" | "Owner" | "Admin";
     };
     isOpen: boolean;
     onToggle: () => void;
     onClose: () => void;
     onSignOut: () => void;
     variant?: "desktop" | "mobile";
+};
+
+const roleBasedMenuItems = {
+    Customer: [
+        { title: "My Rentals", href: "/dashboard/customer/rentals" },
+        { title: "Favorites", href: "/dashboard/customer/favorites" },
+        { title: "Profile", href: "/dashboard/customer/profile" },
+    ],
+    Owner: [
+        { title: "Add Equipment", href: "/dashboard/owner/add-equipment" },
+        { title: "My Equipment", href: "/dashboard/owner/equipment" },
+        { title: "Profile", href: "/dashboard/owner/profile" },
+    ],
+    Admin: [
+        { title: "Admin Overview", href: "/dashboard/admin" },
+        { title: "Profile", href: "/dashboard/admin/profile" },
+    ],
 };
 
 const UserProfile = ({
@@ -29,6 +47,15 @@ const UserProfile = ({
 
     const [mobileImageError, setMobileImageError] = useState(false);
     const [desktopImageError, setDesktopImageError] = useState(false);
+
+    const menuItems = roleBasedMenuItems[user.role];
+
+    const roleBadgeClass =
+        user.role === "Admin"
+            ? "bg-[#E8EEF5] text-[#0F2B46]"
+            : user.role === "Owner"
+                ? "bg-[#CCFBF1] text-[#0F766E]"
+                : "bg-[#EEF1F5] text-[#5B6778]";
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -76,35 +103,23 @@ const UserProfile = ({
                         <p className="truncate text-xs text-base-content/60">
                             {user.email}
                         </p>
+                        <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${roleBadgeClass}`}>
+                            {user.role}
+                        </span>
                     </div>
                 </div>
 
-                <Link
-                    href="/create-event"
-                    onClick={onClose}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-base-content/80 transition hover:bg-base-300"
-                >
-                    <span>⊕</span>
-                    <span>Create Event</span>
-                </Link>
-
-                <Link
-                    href="/manage-events"
-                    onClick={onClose}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-base-content/80 transition hover:bg-base-300"
-                >
-                    <span>⚙️</span>
-                    <span>Manage Events</span>
-                </Link>
-
-                <Link
-                    href="/joined-events"
-                    onClick={onClose}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-base-content/80 transition hover:bg-base-300"
-                >
-                    <span>✓</span>
-                    <span>Joined Events</span>
-                </Link>
+                {menuItems.map((item) => (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={onClose}
+                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-base-content/80 transition hover:bg-base-300"
+                    >
+                        <span>›</span>
+                        <span>{item.title}</span>
+                    </Link>
+                ))}
 
                 <div className="mt-2 border-t border-base-300 pt-2">
                     <button
@@ -154,31 +169,21 @@ const UserProfile = ({
                         <p className="truncate text-xs text-base-content/60">
                             {user.email}
                         </p>
+                        <span
+                            className={`mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${roleBadgeClass}`}
+                        >
+                            {user.role}
+                        </span>
                     </div>
 
                     <div className="space-y-1">
                         <Link
-                            href="/create-event"
+                            href="/dashboard"
                             onClick={onClose}
-                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-base-content/80 transition hover:bg-base-300"
+                            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-base-content transition hover:bg-base-300"
                         >
-                            ⊕ <span>Create Event</span>
-                        </Link>
-
-                        <Link
-                            href="/manage-events"
-                            onClick={onClose}
-                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-base-content/80 transition hover:bg-base-300"
-                        >
-                            ⚙️ <span>Manage Events</span>
-                        </Link>
-
-                        <Link
-                            href="/joined-events"
-                            onClick={onClose}
-                            className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-base-content/80 transition hover:bg-base-300"
-                        >
-                            ✓ <span>Joined Events</span>
+                            <span>›</span>
+                            <span>Dashboard</span>
                         </Link>
                     </div>
 

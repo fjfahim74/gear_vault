@@ -42,6 +42,44 @@ const MobileNav = ({
                     {/* Mobile Menu */}
                     <div className="absolute left-0 top-full z-50 w-full border-t border-base-300 bg-base-100 p-4 md:hidden">
                         <div className="flex flex-col gap-4">
+
+                            {/* Public Navigation Links */}
+                            <Link
+                                href="/"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                Home
+                            </Link>
+
+                            <Link
+                                href="/equipment"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                All Equipment
+                            </Link>
+
+                            <Link
+                                href="/how-it-works"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                How It Works
+                            </Link>
+
+                            <Link
+                                href="/about"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                About
+                            </Link>
+
+                            <Link
+                                href="/contact"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                Contact
+                            </Link>
+
+                            {/* Authentication */}
                             {isPending ? (
                                 <div className="h-5 w-24 animate-pulse rounded bg-base-300" />
                             ) : !session ? (
@@ -56,20 +94,30 @@ const MobileNav = ({
                                     <Link
                                         href="/sign-up"
                                         onClick={() => setIsMenuOpen(false)}
-                                        className="font-semibold text-emerald-500"
+                                        className="font-semibold text-accent"
                                     >
                                         Register
                                     </Link>
                                 </>
                             ) : (
-                                <UserProfile
-                                    user={session.user}
-                                    isOpen={false}
-                                    onToggle={() => { }}
-                                    onClose={() => setIsMenuOpen(false)}
-                                    onSignOut={handleSignOut}
-                                    variant="mobile"
-                                />
+                                <>
+                                    <Link
+                                        href="/dashboard"
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="font-semibold text-accent"
+                                    >
+                                        Dashboard
+                                    </Link>
+
+                                    <UserProfile
+                                        user={session.user}
+                                        isOpen={false}
+                                        onToggle={() => { }}
+                                        onClose={() => setIsMenuOpen(false)}
+                                        onSignOut={handleSignOut}
+                                        variant="mobile"
+                                    />
+                                </>
                             )}
                         </div>
                     </div>
