@@ -12,6 +12,24 @@ export const auth = betterAuth({
         enabled: true,
         autoSignIn: false,
     },
+    baseURL: process.env.BETTER_AUTH_URL,
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        },
+    },
+
+    user: {
+        additionalFields: {
+            role: {
+                type: ["Customer", "Owner", "Admin"],
+                required: false,
+                defaultValue: "Customer",
+                input: false,
+            },
+        },
+    },
 
     hooks: {
         before: createAuthMiddleware(async (ctx) => {
@@ -31,7 +49,17 @@ export const auth = betterAuth({
     },
 
     plugins: [
-        jwt(),
+        jwt({
+            jwt: {
+                definePayload: ({ user }) => {
+                    return {
+                        id: user.id,
+                        email: user.email,
+                        role: user.role,
+                    };
+                },
+            },
+        }),
     ],
 
     session: {
