@@ -1,83 +1,97 @@
+import Link from "next/link";
+import { Cog } from "lucide-react";
+
 const Footer = () => {
     return (
         <footer className="border-t border-base-300 bg-base-100">
-            <div className="mx-auto max-w-7xl px-4 py-10">
+            <div className="mx-auto max-w-7xl px-4 py-12">
 
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-4 items-start">
+                <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-4">
 
-                    {/* Column 1: Logo and Description */}
-                    <div className="flex flex-col items-start space-y-3">
-                        <h2 className="text-xl font-bold leading-none text-green-700">
-                            Eventify
-                        </h2>
+                    {/* Brand */}
+                    <div className="flex flex-col items-start gap-4">
+                        <Link href="/" className="flex items-center gap-2">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-content">
+                                <Cog className="h-5 w-5" />
+                            </div>
 
-                        <p className="text-sm text-base-content/70">
-                            Together, we can make a difference in our community.
-                        </p>
-
-                        <div className="flex items-center gap-1.5 text-xs text-base-content/65 pt-1">
-                            <span>📍</span>
-                            <span>Nationwide Impact</span>
-                        </div>
-                    </div>
-
-                    {/* Column 2: Explore Platform */}
-                    <div className="flex flex-col space-y-3">
-                        <h3 className="text-xs font-bold tracking-wider text-base-content uppercase">
-                            Explore Platform
-                        </h3>
-
-                        <div className="flex flex-col space-y-2 text-sm">
-                            <a href="/" className="text-base-content/70 hover:text-emerald-500 transition-colors">
-                                Home
-                            </a>
-                            <a href="/upcoming-events" className="text-base-content/70 hover:text-emerald-500 transition-colors">
-                                Upcoming Events
-                            </a>
-                            <a href="/sign-up" className="text-base-content/70 hover:text-emerald-500 transition-colors">
-                                Join Us
-                            </a>
-                        </div>
-                    </div>
-
-                    {/* Column 3: Active Causes */}
-                    <div className="flex flex-col space-y-3">
-                        <h3 className="text-xs font-bold tracking-wider text-base-content uppercase">
-                            Active Causes
-                        </h3>
-
-                        <div className="flex flex-col space-y-2 text-sm text-base-content/70">
-                            <span>🟢 Winter Clothes & Blanket Relief</span>
-                            <span>🟢 City Clean-up & Waste Segregation</span>
-                            <span>🟠 Underprivileged Meal Sharing</span>
-                        </div>
-                    </div>
-
-                    {/* Column 4: Community */}
-                    <div className="flex flex-col space-y-3">
-                        <h3 className="text-xs font-bold tracking-wider text-base-content uppercase">
-                            Community Spirit
-                        </h3>
-
-                        <p className="text-sm text-base-content/70">
-                            Every small action counts. Connect with local volunteers and turn compassion into direct community aid.
-                        </p>
-
-                        <div>
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-600">
-                                🌍 100% Volunteer Driven
+                            <span className="text-xl font-extrabold text-base-content">
+                                Gear<span className="text-primary">Vault</span>
                             </span>
+                        </Link>
+
+                        <p className="max-w-xs text-sm leading-relaxed text-base-content/70">
+                            Rent the right gear. Skip the cost of owning it.
+                            Find quality equipment for your next project or adventure.
+                        </p>
+                    </div>
+
+                    {/* Explore */}
+                    <div className="flex flex-col gap-4">
+                        <h3 className="text-sm font-bold uppercase tracking-wider text-base-content">
+                            Explore
+                        </h3>
+
+                        <div className="flex flex-col gap-3 text-sm">
+                            <Link href="/" className="text-base-content/70 transition hover:text-primary">
+                                Home
+                            </Link>
+
+                            <Link href="/equipment" className="text-base-content/70 transition hover:text-primary">
+                                All Equipment
+                            </Link>
+
+                            <Link href="/how-it-works" className="text-base-content/70 transition hover:text-primary">
+                                How It Works
+                            </Link>
                         </div>
+                    </div>
+
+                    {/* Company */}
+                    <div className="flex flex-col gap-4">
+                        <h3 className="text-sm font-bold uppercase tracking-wider text-base-content">
+                            Company
+                        </h3>
+
+                        <div className="flex flex-col gap-3 text-sm">
+                            <Link href="/about" className="text-base-content/70 transition hover:text-primary">
+                                About Us
+                            </Link>
+
+                            <Link href="/contact" className="text-base-content/70 transition hover:text-primary">
+                                Contact
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Account */}
+                    <div className="flex flex-col gap-4">
+                        <h3 className="text-sm font-bold uppercase tracking-wider text-base-content">
+                            Your Account
+                        </h3>
+
+                        <div className="flex flex-col gap-3 text-sm">
+                            <Link href="/sign-in" className="text-base-content/70 transition hover:text-primary">
+                                Login
+                            </Link>
+
+                            <Link href="/sign-up" className="text-base-content/70 transition hover:text-primary">
+                                Get Started
+                            </Link>
+                        </div>
+
+                        <p className="text-sm leading-relaxed text-base-content/60">
+                            Quality equipment, when you need it.
+                        </p>
                     </div>
 
                 </div>
 
                 {/* Divider */}
-                <div className="mt-8 border-t border-base-200 pt-6"></div>
-
-                {/* Copyright */}
-                <div className="flex items-center justify-center text-center text-xs text-base-content/60">
-                    <p>© 2026 Eventify. All rights reserved.</p>
+                <div className="mt-10 border-t border-base-300 pt-6">
+                    <p className="text-center text-xs text-base-content/60">
+                        © 2026 GearVault. All rights reserved.
+                    </p>
                 </div>
 
             </div>

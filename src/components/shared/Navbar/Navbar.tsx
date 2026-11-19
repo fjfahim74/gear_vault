@@ -72,7 +72,7 @@ const Navbar = () => {
                     <Cog className="h-6 w-6" strokeWidth={2.2} />       </div>
 
                     <span className="text-xl font-extrabold tracking-tight text-base-content">
-                        GearVault
+                        Gear<span className="text-primary">Vault</span>
                     </span>
                 </Link>
 
