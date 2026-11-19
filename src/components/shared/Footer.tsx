@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Cog } from "lucide-react";
+import Logo from "./Logo";
+import { FaXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
     return (
@@ -10,20 +11,22 @@ const Footer = () => {
 
                     {/* Brand */}
                     <div className="flex flex-col items-start gap-4">
-                        <Link href="/" className="flex items-center gap-2">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-content">
-                                <Cog className="h-5 w-5" />
-                            </div>
-
-                            <span className="text-xl font-extrabold text-base-content">
-                                Gear<span className="text-primary">Vault</span>
-                            </span>
-                        </Link>
+                        <Logo />
 
                         <p className="max-w-xs text-sm leading-relaxed text-base-content/70">
                             Rent the right gear. Skip the cost of owning it.
                             Find quality equipment for your next project or adventure.
                         </p>
+
+                        <Link
+                            href="https://x.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="X"
+                            className="text-xl text-base-content/70 transition hover:text-primary"
+                        >
+                            <FaXTwitter />
+                        </Link>
                     </div>
 
                     {/* Explore */}

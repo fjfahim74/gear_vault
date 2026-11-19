@@ -1,15 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Package } from "lucide-react";
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
 
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
-import { Cog } from "lucide-react";
+import Logo from "../Logo";
 
 const Navbar = () => {
     const router = useRouter();
@@ -68,14 +66,8 @@ const Navbar = () => {
             <div className="navbar mx-auto max-w-7xl px-4">
 
                 {/* Logo */}
-                <div className="navbar-start">     <Link href="/" className="group flex items-center gap-2.5">         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-content shadow-sm transition-transform group-hover:scale-105">
-                    <Cog className="h-6 w-6" strokeWidth={2.2} />       </div>
-
-                    <span className="text-xl font-extrabold tracking-tight text-base-content">
-                        Gear<span className="text-primary">Vault</span>
-                    </span>
-                </Link>
-
+                <div className="navbar-start">
+                    <Logo />
                 </div>
 
                 {/* Desktop Navigation */}
