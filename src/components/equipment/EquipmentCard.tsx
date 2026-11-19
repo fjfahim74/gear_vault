@@ -20,12 +20,17 @@ export default function EquipmentCard({ equipment }: EquipmentCardProps) {
     return (
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-lg">
             <div className="relative h-52 w-full">
-                <Image
-                    src={equipment.imageUrl}
-                    alt={equipment.name}
-                    fill
-                    className="object-cover"
-                />
+                {equipment.imageUrl ? (
+                    <img
+                        src={equipment.imageUrl}
+                        alt={equipment.name}
+                        className="h-full w-full object-cover"
+                    />
+                ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-slate-100 text-sm text-slate-400">
+                        No image available
+                    </div>
+                )}
             </div>
 
             <div className="p-5">
