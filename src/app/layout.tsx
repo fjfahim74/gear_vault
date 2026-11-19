@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import Footer from "@/components/shared/Footer";
+import Toaster from "@/components/shared/Toaster";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -33,7 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
-        <ToastContainer position="top-right" autoClose={3000} />
+        <Toaster />
       </body>
     </html>
   );
