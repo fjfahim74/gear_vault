@@ -114,7 +114,7 @@ export default function SignInPage() {
                     </h1>
 
                     <p className="mt-2 text-sm text-base-content/60">
-                        Sign in to continue to your Eventify account.
+                        Sign in to continue to your GearVault account.
                     </p>
                 </div>
 
@@ -133,7 +133,7 @@ export default function SignInPage() {
                             autoComplete="off"
                             required
                             disabled={isLoading}
-                            className="w-full rounded-lg border-2 border-base-content/20 bg-base-100 px-4 py-3 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                            className="w-full rounded-lg border-2 border-base-300 bg-base-100 px-4 py-3 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                     </div>
 
@@ -151,7 +151,7 @@ export default function SignInPage() {
                                 autoComplete="current-password"
                                 required
                                 disabled={isLoading}
-                                className="w-full rounded-lg border-2 border-base-content/20 bg-base-100 px-4 py-3 pr-20 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                                className="w-full rounded-lg border-2 border-base-300 bg-base-100 px-4 py-3 pr-20 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                             />
 
                             <button
@@ -167,7 +167,7 @@ export default function SignInPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full rounded-lg bg-[#176B4D] py-3 font-semibold text-white transition hover:bg-[#12583E] disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-lg bg-primary py-3 font-semibold text-primary-content transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoading ? "Signing In..." : "Sign In"}
                     </button>
@@ -219,7 +219,7 @@ export default function SignInPage() {
                     Don't have an account?{" "}
                     <Link
                         href="/sign-up"
-                        className="font-semibold text-[#176B4D] hover:underline"
+                        className="font-semibold text-primary hover:underline"
                     >
                         Sign Up
                     </Link>

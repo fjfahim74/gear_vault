@@ -52,10 +52,10 @@ const UserProfile = ({
 
     const roleBadgeClass =
         user.role === "Admin"
-            ? "bg-[#E8EEF5] text-[#0F2B46]"
+            ? "bg-secondary/10 text-secondary"
             : user.role === "Owner"
-                ? "bg-[#CCFBF1] text-[#0F766E]"
-                : "bg-[#EEF1F5] text-[#5B6778]";
+                ? "bg-accent/10 text-accent"
+                : "bg-base-300 text-base-content/70";
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -88,10 +88,10 @@ const UserProfile = ({
                             height={42}
                             unoptimized
                             onError={() => setMobileImageError(true)}
-                            className="h-11 w-11 rounded-full object-cover ring-2 ring-emerald-500/20"
+                            className="h-11 w-11 rounded-full object-cover ring-2 ring-primary/20"
                         />
                     ) : (
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-green-700 font-semibold text-white shadow-sm">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary font-semibold text-primary-content shadow-sm">
                             {user.name?.charAt(0).toUpperCase() || "U"}
                         </div>
                     )}
@@ -124,7 +124,7 @@ const UserProfile = ({
                 <div className="mt-2 border-t border-base-300 pt-2">
                     <button
                         onClick={onSignOut}
-                        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-rose-600 transition hover:bg-rose-50"
+                        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-error transition hover:bg-error/10"
                     >
                         <span>➔</span>
                         <span>Logout</span>
@@ -151,17 +151,17 @@ const UserProfile = ({
                         height={38}
                         unoptimized
                         onError={() => setDesktopImageError(true)}
-                        className="h-9 w-9 rounded-full object-cover ring-2 ring-transparent transition group-hover:ring-emerald-600/30"
+                        className="h-9 w-9 rounded-full object-cover ring-2 ring-transparent transition group-hover:ring-primary/30"
                     />
                 ) : (
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-700 text-xs font-semibold text-white ring-2 ring-transparent transition group-hover:ring-emerald-600/30">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-content ring-2 ring-transparent transition group-hover:ring-primary/30">
                         {user.name?.charAt(0).toUpperCase() || "U"}
                     </div>
                 )}
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 top-full z-[100] mt-3 w-64 rounded-2xl border border-base-300 bg-base-200 p-2 shadow-xl">
+                <div className="absolute right-0 top-full z-[100] mt-3 w-64 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl">
                     <div className="mb-2 border-b border-base-300 px-3 py-2.5">
                         <p className="truncate text-sm font-semibold text-base-content">
                             {user.name}
@@ -191,7 +191,7 @@ const UserProfile = ({
                         <button
                             type="button"
                             onClick={onSignOut}
-                            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-rose-600 transition hover:bg-rose-50"
+                            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-error transition hover:bg-error/10"
                         >
                             ➔ <span>Logout</span>
                         </button>

@@ -59,18 +59,18 @@ const categories = [
 
 export default function Categories() {
     return (
-        <section className="bg-white py-20">
+        <section className="bg-base-100 py-20">
             <div className="mx-auto max-w-7xl px-5">
                 <div className="mb-10">
-                    <p className="mb-2 font-semibold text-teal-700">
+                    <p className="mb-2 font-semibold text-accent">
                         BROWSE BY CATEGORY
                     </p>
 
-                    <h2 className="text-3xl font-bold text-[#0F2B46] md:text-4xl">
+                    <h2 className="text-3xl font-bold text-base-content md:text-4xl">
                         Find Equipment for Every Job
                     </h2>
 
-                    <p className="mt-3 text-slate-600">
+                    <p className="mt-3 text-base-content/70">
                         Explore equipment across different categories for your next project.
                     </p>
                 </div>
@@ -89,7 +89,7 @@ export default function Categories() {
                             >
                                 <Link
                                     href={`/equipment?category=${category.slug}`}
-                                    className="group relative block aspect-square overflow-hidden rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#F4A300] sm:aspect-[4/3]"
+                                    className="group relative block aspect-square overflow-hidden rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-primary sm:aspect-[4/3]"
                                 >
                                     <div
                                         className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
@@ -108,7 +108,7 @@ export default function Categories() {
                                         </h3>
                                     </div>
 
-                                    <div className="absolute right-4 top-4 flex h-9 w-9 translate-y-2 items-center justify-center rounded-full bg-white text-[#0F2B46] opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
+                                    <div className="absolute right-4 top-4 flex h-9 w-9 translate-y-2 items-center justify-center rounded-full bg-base-100 text-secondary opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
                                         <ArrowUpRight size={19} />
                                     </div>
                                 </Link>

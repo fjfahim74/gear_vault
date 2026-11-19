@@ -32,18 +32,18 @@ const benefits = [
 
 export default function WhyChooseUs() {
     return (
-        <section className="bg-[#F8FAFC] py-20">
+        <section className="bg-base-200 py-20">
             <div className="mx-auto grid max-w-7xl gap-12 px-5 md:grid-cols-12 md:items-center">
                 <div className="md:col-span-5">
-                    <p className="mb-3 font-semibold text-teal-700">
+                    <p className="mb-3 font-semibold text-accent">
                         WHY GEARVAULT
                     </p>
 
-                    <h2 className="text-3xl font-bold leading-tight text-[#0F2B46] md:text-4xl">
+                    <h2 className="text-3xl font-bold leading-tight text-base-content md:text-4xl">
                         Rent with Confidence
                     </h2>
 
-                    <p className="mt-5 leading-7 text-slate-600">
+                    <p className="mt-5 leading-7 text-base-content/70">
                         Finding the right equipment should be simple and stress-free.
                         GearVault connects you with reviewed equipment listings, flexible
                         rental options, and secure payments—all in one place.
@@ -51,7 +51,7 @@ export default function WhyChooseUs() {
 
                     <Link
                         href="/equipment"
-                        className="mt-6 inline-flex items-center gap-2 font-semibold text-[#0F2B46] transition hover:text-teal-700"
+                        className="mt-6 inline-flex items-center gap-2 font-semibold text-secondary transition hover:text-accent"
                     >
                         Explore how it works
                         <ArrowRight size={18} />
@@ -65,17 +65,17 @@ export default function WhyChooseUs() {
                         return (
                             <div
                                 key={benefit.title}
-                                className="rounded-xl border border-slate-100 bg-white p-6 transition hover:-translate-y-1 hover:shadow-md"
+                                className="rounded-xl border border-base-300 bg-base-100 p-6 transition hover:-translate-y-1 hover:shadow-md"
                             >
-                                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-[#F4A300]/15 text-[#0F2B46]">
+                                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/15 text-primary-content">
                                     <Icon size={23} />
                                 </div>
 
-                                <h3 className="mb-2 text-lg font-bold text-[#0F2B46]">
+                                <h3 className="mb-2 text-lg font-bold text-base-content">
                                     {benefit.title}
                                 </h3>
 
-                                <p className="text-sm leading-6 text-slate-600">
+                                <p className="text-sm leading-6 text-base-content/70">
                                     {benefit.description}
                                 </p>
                             </div>

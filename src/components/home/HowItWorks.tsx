@@ -38,18 +38,18 @@ const steps = [
 
 export default function HowItWorks() {
     return (
-        <section className="bg-white py-20">
+        <section className="bg-base-100 py-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-14 text-center">
-                    <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-teal-700">
+                    <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-accent">
                         Simple Process
                     </p>
 
-                    <h2 className="text-3xl font-bold text-[#0F2B46] sm:text-4xl">
+                    <h2 className="text-3xl font-bold text-base-content sm:text-4xl">
                         How GearVault Works
                     </h2>
 
-                    <p className="mx-auto mt-4 max-w-2xl text-slate-600">
+                    <p className="mx-auto mt-4 max-w-2xl text-base-content/70">
                         Renting equipment has never been easier. Follow
                         these four simple steps to get started.
                     </p>
@@ -64,19 +64,19 @@ export default function HowItWorks() {
                                 key={step.number}
                                 className="relative text-center"
                             >
-                                <div className="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border-4 border-[#F4A300] bg-[#0F2B46] text-xl font-bold text-white">
+                                <div className="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border-4 border-primary bg-secondary text-xl font-bold text-white">
                                     {step.number}
                                 </div>
 
-                                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+                                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10 text-accent">
                                     <Icon size={28} />
                                 </div>
 
-                                <h3 className="mb-2 text-lg font-semibold text-[#0F2B46]">
+                                <h3 className="mb-2 text-lg font-semibold text-base-content">
                                     {step.title}
                                 </h3>
 
-                                <p className="text-sm leading-6 text-slate-600">
+                                <p className="text-sm leading-6 text-base-content/70">
                                     {step.description}
                                 </p>
                             </div>

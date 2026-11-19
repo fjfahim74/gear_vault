@@ -45,26 +45,26 @@ export default function FeaturedEquipment() {
     }, []);
 
     return (
-        <section className="bg-[#F8FAFC] py-20">
+        <section className="bg-base-200 py-20">
             <div className="mx-auto max-w-7xl px-5">
                 <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
-                        <p className="mb-2 font-semibold text-teal-700">
+                        <p className="mb-2 font-semibold text-accent">
                             EXPLORE OUR MARKETPLACE
                         </p>
 
-                        <h2 className="text-3xl font-bold text-[#0F2B46] md:text-4xl">
+                        <h2 className="text-3xl font-bold text-base-content md:text-4xl">
                             Featured Equipment
                         </h2>
 
-                        <p className="mt-3 text-slate-600">
+                        <p className="mt-3 text-base-content/70">
                             Discover quality equipment ready for your next project.
                         </p>
                     </div>
 
                     <Link
                         href="/equipment"
-                        className="font-semibold text-[#0F2B46] hover:text-teal-700"
+                        className="font-semibold text-secondary transition-colors hover:text-accent"
                     >
                         View All Equipment →
                     </Link>
@@ -75,16 +75,16 @@ export default function FeaturedEquipment() {
                         {[1, 2, 3, 4, 5, 6].map((item) => (
                             <div
                                 key={item}
-                                className="h-80 animate-pulse rounded-2xl bg-slate-200"
+                                className="h-80 animate-pulse rounded-2xl bg-base-300"
                             />
                         ))}
                     </div>
                 ) : error ? (
-                    <p className="py-10 text-center text-red-500">
+                    <p className="py-10 text-center text-error">
                         Failed to load equipment. Please try again later.
                     </p>
                 ) : equipment.length === 0 ? (
-                    <p className="py-10 text-center text-slate-500">
+                    <p className="py-10 text-center text-base-content/70">
                         No equipment available yet. Be the first to list equipment!
                     </p>
                 ) : (

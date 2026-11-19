@@ -104,7 +104,6 @@ export default function SignUpPage() {
             });
 
             const { error } = result;
-            console.log("SIGNUP RESULT:", result);
 
             if (error) {
                 if (error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
@@ -136,7 +135,7 @@ export default function SignUpPage() {
                     </h1>
 
                     <p className="mt-2 text-sm text-base-content/60">
-                        Join Eventify and start making a difference.
+                        Join GearVault and start renting equipment with ease.
                     </p>
                 </div>
 
@@ -155,7 +154,7 @@ export default function SignUpPage() {
                             autoComplete="name"
                             required
                             disabled={isLoading}
-                            className="w-full rounded-lg border-2 border-base-content/20 bg-base-100 px-4 py-3 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                            className="w-full rounded-lg border-2 border-base-300 bg-base-100 px-4 py-3 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                     </div>
 
@@ -172,7 +171,7 @@ export default function SignUpPage() {
                             autoComplete="email"
                             required
                             disabled={isLoading}
-                            className="w-full rounded-lg border-2 border-base-content/20 bg-base-100 px-4 py-3 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                            className="w-full rounded-lg border-2 border-base-300 bg-base-100 px-4 py-3 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                     </div>
 
@@ -188,7 +187,7 @@ export default function SignUpPage() {
                             placeholder="Enter your profile photo URL"
                             required
                             disabled={isLoading}
-                            className="w-full rounded-lg border-2 border-base-content/20 bg-base-100 px-4 py-3 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                            className="w-full rounded-lg border-2 border-base-300 bg-base-100 px-4 py-3 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                     </div>
 
@@ -207,13 +206,13 @@ export default function SignUpPage() {
                                 minLength={6}
                                 required
                                 disabled={isLoading}
-                                className="w-full rounded-lg border-2 border-base-content/20 bg-base-100 px-4 py-3 pr-20 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                                className="w-full rounded-lg border-2 border-base-300 bg-base-100 px-4 py-3 pr-20 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                             />
 
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-base-content/60"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-base-content/60 hover:text-base-content"
                             >
                                 {showPassword ? "Hide" : "Show"}
                             </button>
@@ -235,13 +234,13 @@ export default function SignUpPage() {
                                 minLength={6}
                                 required
                                 disabled={isLoading}
-                                className="w-full rounded-lg border-2 border-base-content/20 bg-base-100 px-4 py-3 pr-20 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+                                className="w-full rounded-lg border-2 border-base-300 bg-base-100 px-4 py-3 pr-20 text-base-content placeholder:text-base-content/40 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
                             />
 
                             <button
                                 type="button"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-base-content/60"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-base-content/60 hover:text-base-content"
                             >
                                 {showConfirmPassword ? "Hide" : "Show"}
                             </button>
@@ -251,7 +250,7 @@ export default function SignUpPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full rounded-lg bg-green-700 py-3 font-semibold text-white transition hover:bg-[#12583E] disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-lg bg-primary py-3 font-semibold text-primary-content transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {isLoading ? "Creating Account..." : "Create Account"}
                     </button>
@@ -297,7 +296,7 @@ export default function SignUpPage() {
                     Already have an account?{" "}
                     <Link
                         href="/sign-in"
-                        className="font-semibold text-[#176B4D] hover:underline"
+                        className="font-semibold text-primary hover:underline"
                     >
                         Sign In
                     </Link>
