@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Manrope, Inter } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
-import Navbar from "@/components/shared/Navbar/Navbar";
-import Footer from "@/components/shared/Footer";
+
+import ConditionalPublicLayout from "@/components/shared/ConditionalPublicLayout";
 import Toaster from "@/components/shared/Toaster";
 
 const manrope = Manrope({
@@ -31,10 +31,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${manrope.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
+
         <Toaster />
+        <ToastContainer />
       </body>
     </html>
   );
