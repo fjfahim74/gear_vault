@@ -12,6 +12,7 @@ import {
     Heart,
     Users,
     Boxes,
+    Receipt,
     ExternalLink,
 } from "lucide-react";
 
@@ -83,6 +84,11 @@ const adminLinks = [
         title: "All Equipment",
         href: "/dashboard/admin/equipment",
         icon: Boxes,
+    },
+    {
+        title: "All Rentals",
+        href: "/dashboard/admin/rentals",
+        icon: Receipt,
     },
 ];
 
