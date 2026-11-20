@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+
 import { auth } from "@/lib/auth";
 import ProfileClient from "@/components/dashboard/ProfileClient";
 
@@ -12,10 +13,10 @@ const AdminProfilePage = async () => {
         redirect("/login");
     }
 
-    const role = session.user.role;
+    const role = session.user.role ?? "Customer";
 
     if (role !== "Admin") {
-        const role = session.user.role ?? "Admin";
+        redirect(`/dashboard/${role.toLowerCase()}`);
     }
 
     return <ProfileClient />;
