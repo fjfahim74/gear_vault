@@ -1,7 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Search, RefreshCw, Receipt, CalendarDays, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+    Search,
+    Receipt,
+    RefreshCw
+} from "lucide-react";
 import { toast } from "react-toastify";
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
@@ -14,12 +18,10 @@ interface Rental {
     equipmentName: string;
     rentalStartDate: string;
     rentalEndDate: string;
-    quantity: number;
     totalAmount: number;
     currency: string;
     paymentStatus: string;
     bookingStatus: string;
-    createdAt: string;
 }
 
 const AdminRentalsClient = () => {
@@ -27,13 +29,17 @@ const AdminRentalsClient = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [search, setSearch] = useState("");
-    const [statusFilter, setStatusFilter] = useState("All");
-    const [selectedRental, setSelectedRental] = useState<Rental | null>(null);
-    const [nextStatus, setNextStatus] = useState<"Completed" | "Cancelled" | null>(null);
+    const [bookingFilter, setBookingFilter] = useState("All");
+    const [paymentFilter, setPaymentFilter] = useState("All");
+
+    const [selectedRental, setSelectedRental] =
+        useState<Rental | null>(null);
+
+    const [nextStatus, setNextStatus] = useState("");
     const [actionLoading, setActionLoading] = useState(false);
 
     // Fetch all rentals
-    const fetchRentals = useCallback(async () => {
+    const fetchRentals = async () => {
         try {
             setLoading(true);
             setError("");
@@ -53,12 +59,11 @@ const AdminRentalsClient = () => {
                 }
             );
 
-            const data = await response.json();
-
             if (!response.ok) {
-                throw new Error(data.message || "Failed to load rentals.");
+                throw new Error("Failed to load rentals.");
             }
 
+            const data = await response.json();
             setRentals(data);
 
         } catch (error) {
@@ -70,32 +75,51 @@ const AdminRentalsClient = () => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    };
 
     useEffect(() => {
         fetchRentals();
-    }, [fetchRentals]);
+    }, []);
 
-    // Search and filter
-    const filteredRentals = useMemo(() => {
-        return rentals.filter(rental => {
-            const term = search.toLowerCase();
+    // Search and filters
+    const filteredRentals = rentals.filter(item => {
+        const searchMatch =
+            item.customerName?.toLowerCase().includes(search.toLowerCase()) ||
+            item.customerEmail?.toLowerCase().includes(search.toLowerCase()) ||
+            item.ownerName?.toLowerCase().includes(search.toLowerCase()) ||
+            item.equipmentName?.toLowerCase().includes(search.toLowerCase());
 
-            const matchesSearch =
-                rental.customerName?.toLowerCase().includes(term) ||
-                rental.customerEmail?.toLowerCase().includes(term) ||
-                rental.ownerName?.toLowerCase().includes(term) ||
-                rental.ownerEmail?.toLowerCase().includes(term) ||
-                rental.equipmentName?.toLowerCase().includes(term);
+        const bookingMatch =
+            bookingFilter === "All" ||
+            item.bookingStatus === bookingFilter;
 
-            return matchesSearch &&
-                (statusFilter === "All" || rental.bookingStatus === statusFilter);
-        });
-    }, [rentals, search, statusFilter]);
+        const paymentMatch =
+            paymentFilter === "All" ||
+            item.paymentStatus === paymentFilter;
+
+        return searchMatch && bookingMatch && paymentMatch;
+    });
+
+    // Status badge
+    const getStatusBadge = (status: string) => {
+        if (["Paid", "Completed"].includes(status)) {
+            return "badge-success";
+        }
+
+        if (["Confirmed"].includes(status)) {
+            return "badge-info";
+        }
+
+        if (["Cancelled", "Failed"].includes(status)) {
+            return "badge-error";
+        }
+
+        return "badge-warning";
+    };
 
     // Format date
-    const formatDate = (value: string) => {
-        return new Date(value).toLocaleDateString("en-US", {
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
             year: "numeric"
@@ -110,30 +134,8 @@ const AdminRentalsClient = () => {
         }).format(amount);
     };
 
-    // Status badge
-    const badgeClass = (status: string) => {
-        switch (status?.toLowerCase()) {
-            case "paid":
-            case "completed":
-                return "badge-success";
-
-            case "confirmed":
-                return "badge-info";
-
-            case "pending":
-                return "badge-warning";
-
-            case "cancelled":
-            case "failed":
-                return "badge-error";
-
-            default:
-                return "badge-ghost";
-        }
-    };
-
-    // Update rental status
-    const updateStatus = async () => {
+    // Update booking status
+    const handleStatusUpdate = async () => {
         if (!selectedRental || !nextStatus) return;
 
         try {
@@ -162,7 +164,7 @@ const AdminRentalsClient = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Could not update rental.");
+                throw new Error(data.message || "Failed to update rental.");
             }
 
             setRentals(prev =>
@@ -173,10 +175,10 @@ const AdminRentalsClient = () => {
                 )
             );
 
-            toast.success(data.message || "Rental status updated.");
+            toast.success("Booking status updated.");
 
             setSelectedRental(null);
-            setNextStatus(null);
+            setNextStatus("");
 
         } catch (error) {
             toast.error(
@@ -189,137 +191,90 @@ const AdminRentalsClient = () => {
         }
     };
 
-    // Open confirmation dialog
-    const openStatusDialog = (
-        rental: Rental,
-        status: "Completed" | "Cancelled"
-    ) => {
-        setSelectedRental(rental);
-        setNextStatus(status);
-    };
-
-    const statusTabs = ["All", "Confirmed", "Completed", "Cancelled"];
-
     return (
         <section className="space-y-6">
 
-            {/* Header */}
-            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            {/* Heading */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-primary">
-                        Marketplace control
-                    </p>
-
-                    <h1 className="mt-1 text-2xl font-bold">
+                    <h1 className="text-2xl font-bold text-base-content">
                         All Rentals
                     </h1>
 
                     <p className="mt-1 text-sm text-base-content/60">
-                        Monitor every rental booking and its payment status.
+                        Monitor and manage all rental bookings.
                     </p>
                 </div>
 
-                <button
-                    onClick={fetchRentals}
-                    className="btn btn-outline btn-sm"
-                    disabled={loading}
-                >
-                    <RefreshCw
-                        size={16}
-                        className={loading ? "animate-spin" : ""}
-                    />
-                    Refresh
-                </button>
-            </div>
+                <div className="flex items-center gap-2 rounded-xl border border-base-300 bg-base-100 px-4 py-3">
+                    <Receipt size={20} className="text-primary" />
 
-            {/* Statistics */}
-            <div className="grid gap-3 sm:grid-cols-3">
-                {[
-                    {
-                        label: "Total rentals",
-                        value: rentals.length
-                    },
-                    {
-                        label: "Confirmed",
-                        value: rentals.filter(
-                            item => item.bookingStatus === "Confirmed"
-                        ).length
-                    },
-                    {
-                        label: "Completed",
-                        value: rentals.filter(
-                            item => item.bookingStatus === "Completed"
-                        ).length
-                    }
-                ].map(stat => (
-                    <div
-                        key={stat.label}
-                        className="rounded-xl border border-base-300 bg-base-100 p-4"
-                    >
-                        <p className="text-sm text-base-content/60">
-                            {stat.label}
+                    <div>
+                        <p className="text-xs text-base-content/50">
+                            Total Rentals
                         </p>
-
-                        <p className="mt-1 text-2xl font-bold tabular-nums">
-                            {stat.value}
-                        </p>
+                        <p className="font-bold">{rentals.length}</p>
                     </div>
-                ))}
+                </div>
             </div>
 
             {/* Search and Filters */}
-            <div className="rounded-xl border border-base-300 bg-base-100 p-4 sm:p-5">
+            <div className="space-y-3 rounded-xl border border-base-300 bg-base-100 p-4">
 
-                <div className="relative">
-                    <Search
-                        size={18}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40"
-                    />
+                <div className="flex flex-col gap-3 sm:flex-row">
+                    <label className="input input-bordered flex flex-1 items-center gap-2">
+                        <Search size={18} className="text-base-content/50" />
 
-                    <input
-                        value={search}
-                        onChange={event => setSearch(event.target.value)}
-                        placeholder="Search customer, owner, or equipment..."
-                        className="input input-bordered w-full pl-10"
-                    />
+                        <input
+                            type="text"
+                            placeholder="Search customer, owner or equipment..."
+                            value={search}
+                            onChange={event => setSearch(event.target.value)}
+                        />
+                    </label>
+
+                    <button
+                        onClick={fetchRentals}
+                        className="btn btn-outline"
+                        disabled={loading}
+                    >
+                        <RefreshCw size={17} />
+                        Refresh
+                    </button>
                 </div>
 
-                <div className="mt-4 flex flex-wrap gap-2">
-                    {statusTabs.map(status => {
-                        const count = status === "All"
-                            ? rentals.length
-                            : rentals.filter(
-                                item => item.bookingStatus === status
-                            ).length;
+                <div className="flex flex-wrap gap-3">
+                    <select
+                        className="select select-bordered select-sm"
+                        value={bookingFilter}
+                        onChange={event => setBookingFilter(event.target.value)}
+                    >
+                        <option value="All">All Booking Status</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
 
-                        return (
-                            <button
-                                key={status}
-                                onClick={() => setStatusFilter(status)}
-                                className={`btn btn-sm ${statusFilter === status
-                                        ? "btn-primary"
-                                        : "btn-ghost border border-base-300"
-                                    }`}
-                            >
-                                {status}
-                                <span className="ml-1 opacity-70">
-                                    {count}
-                                </span>
-                            </button>
-                        );
-                    })}
+                    <select
+                        className="select select-bordered select-sm"
+                        value={paymentFilter}
+                        onChange={event => setPaymentFilter(event.target.value)}
+                    >
+                        <option value="All">All Payment Status</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Failed">Failed</option>
+                    </select>
                 </div>
             </div>
 
-            {/* Rental Records */}
+            {/* Rentals Table */}
             {loading ? (
-                <div className="space-y-3">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                        <div
-                            key={index}
-                            className="skeleton h-20 w-full rounded-xl"
-                        />
-                    ))}
+                <div className="rounded-xl border border-base-300 bg-base-100 py-16 text-center">
+                    <span className="loading loading-spinner loading-lg text-primary" />
+                    <p className="mt-3 text-sm text-base-content/60">
+                        Loading rentals...
+                    </p>
                 </div>
             ) : error ? (
                 <div className="rounded-xl border border-error/30 bg-base-100 p-8 text-center">
@@ -333,286 +288,147 @@ const AdminRentalsClient = () => {
                     </button>
                 </div>
             ) : filteredRentals.length === 0 ? (
-                <div className="rounded-xl border border-base-300 bg-base-100 px-5 py-14 text-center">
+                <div className="rounded-xl border border-base-300 bg-base-100 py-16 text-center">
                     <Receipt
-                        size={34}
+                        size={40}
                         className="mx-auto text-base-content/30"
                     />
 
                     <h2 className="mt-3 font-semibold">
-                        {rentals.length
-                            ? "No matching rentals"
-                            : "No rental records yet"}
+                        No rentals found
                     </h2>
 
-                    <p className="mt-1 text-sm text-base-content/60">
-                        {rentals.length
-                            ? "Try another search or status filter."
-                            : "Confirmed bookings will appear here."}
+                    <p className="mt-1 text-sm text-base-content/50">
+                        Try changing your search or filters.
                     </p>
                 </div>
             ) : (
-                <>
-                    {/* Desktop Table */}
-                    <div className="hidden overflow-x-auto rounded-xl border border-base-300 bg-base-100 xl:block">
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Customer</th>
-                                    <th>Owner</th>
-                                    <th>Equipment</th>
-                                    <th>Rental Duration</th>
-                                    <th>Amount</th>
-                                    <th>Payment</th>
-                                    <th>Booking</th>
-                                    <th>Manage</th>
-                                </tr>
-                            </thead>
+                <div className="overflow-x-auto rounded-xl border border-base-300 bg-base-100">
+                    <table className="table min-w-[1100px]">
+                        <thead>
+                            <tr className="bg-base-200/60 text-base-content/70">
+                                <th>Customer</th>
+                                <th>Owner</th>
+                                <th>Equipment</th>
+                                <th>Rental Duration</th>
+                                <th>Amount</th>
+                                <th>Payment</th>
+                                <th>Booking</th>
+                                <th>Manage</th>
+                            </tr>
+                        </thead>
 
-                            <tbody>
-                                {filteredRentals.map(rental => (
-                                    <tr key={rental._id}>
-                                        <td>
-                                            <p className="font-semibold">
-                                                {rental.customerName}
-                                            </p>
-                                            <p className="text-xs text-base-content/60">
-                                                {rental.customerEmail}
-                                            </p>
-                                        </td>
-
-                                        <td>
-                                            <p className="font-medium">
-                                                {rental.ownerName}
-                                            </p>
-                                            <p className="text-xs text-base-content/60">
-                                                {rental.ownerEmail}
-                                            </p>
-                                        </td>
-
-                                        <td className="font-medium">
-                                            {rental.equipmentName}
-                                        </td>
-
-                                        <td className="whitespace-nowrap text-sm">
-                                            {formatDate(rental.rentalStartDate)}
-                                            {" – "}
-                                            {formatDate(rental.rentalEndDate)}
-                                        </td>
-
-                                        <td className="whitespace-nowrap font-semibold tabular-nums">
-                                            {formatAmount(rental.totalAmount, rental.currency)}
-                                        </td>
-
-                                        <td>
-                                            <span className={`badge ${badgeClass(rental.paymentStatus)}`}>
-                                                {rental.paymentStatus}
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            <span className={`badge ${badgeClass(rental.bookingStatus)}`}>
-                                                {rental.bookingStatus}
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            {rental.bookingStatus === "Confirmed" ? (
-                                                <div className="flex gap-1">
-                                                    <button
-                                                        onClick={() => openStatusDialog(rental, "Completed")}
-                                                        className="btn btn-success btn-xs"
-                                                    >
-                                                        Complete
-                                                    </button>
-
-                                                    <button
-                                                        onClick={() => openStatusDialog(rental, "Cancelled")}
-                                                        className="btn btn-error btn-xs"
-                                                    >
-                                                        Cancel
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <span className="text-xs text-base-content/50">
-                                                    No actions
-                                                </span>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {/* Mobile Cards */}
-                    <div className="grid gap-3 xl:hidden">
-                        {filteredRentals.map(rental => (
-                            <article
-                                key={rental._id}
-                                className="rounded-xl border border-base-300 bg-base-100 p-4"
-                            >
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <h2 className="font-semibold">
-                                            {rental.equipmentName}
-                                        </h2>
-
-                                        <p className="mt-1 text-xs text-base-content/60">
-                                            {formatDate(rental.rentalStartDate)}
-                                            {" – "}
-                                            {formatDate(rental.rentalEndDate)}
-                                        </p>
-                                    </div>
-
-                                    <span className={`badge ${badgeClass(rental.bookingStatus)}`}>
-                                        {rental.bookingStatus}
-                                    </span>
-                                </div>
-
-                                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                                    <div>
-                                        <p className="text-xs text-base-content/50">
-                                            Customer
-                                        </p>
+                        <tbody>
+                            {filteredRentals.map(item => (
+                                <tr key={item._id}>
+                                    <td>
                                         <p className="font-medium">
-                                            {rental.customerName}
+                                            {item.customerName}
                                         </p>
-                                        <p className="break-all text-xs text-base-content/60">
-                                            {rental.customerEmail}
+                                        <p className="text-xs text-base-content/60">
+                                            {item.customerEmail}
                                         </p>
-                                    </div>
+                                    </td>
 
-                                    <div>
-                                        <p className="text-xs text-base-content/50">
-                                            Owner
-                                        </p>
+                                    <td>
                                         <p className="font-medium">
-                                            {rental.ownerName}
+                                            {item.ownerName}
                                         </p>
-                                        <p className="break-all text-xs text-base-content/60">
-                                            {rental.ownerEmail}
+                                        <p className="text-xs text-base-content/60">
+                                            {item.ownerEmail}
                                         </p>
-                                    </div>
+                                    </td>
 
-                                    <div>
-                                        <p className="text-xs text-base-content/50">
-                                            Booking amount
-                                        </p>
-                                        <p className="font-semibold">
-                                            {formatAmount(rental.totalAmount, rental.currency)}
-                                        </p>
-                                    </div>
+                                    <td className="font-medium">
+                                        {item.equipmentName}
+                                    </td>
 
-                                    <div>
-                                        <p className="text-xs text-base-content/50">
-                                            Payment
-                                        </p>
-                                        <span className={`badge ${badgeClass(rental.paymentStatus)}`}>
-                                            {rental.paymentStatus}
+                                    <td className="whitespace-nowrap text-sm">
+                                        {formatDate(item.rentalStartDate)}
+                                        {" - "}
+                                        {formatDate(item.rentalEndDate)}
+                                    </td>
+
+                                    <td className="whitespace-nowrap font-semibold">
+                                        {formatAmount(item.totalAmount, item.currency)}
+                                    </td>
+
+                                    <td>
+                                        <span className={`badge ${getStatusBadge(item.paymentStatus)}`}>
+                                            {item.paymentStatus}
                                         </span>
-                                    </div>
-                                </div>
+                                    </td>
 
-                                {rental.bookingStatus === "Confirmed" && (
-                                    <div className="mt-4 flex gap-2">
-                                        <button
-                                            onClick={() => openStatusDialog(rental, "Completed")}
-                                            className="btn btn-success btn-sm flex-1"
-                                        >
-                                            Mark Completed
-                                        </button>
+                                    <td>
+                                        <span className={`badge ${getStatusBadge(item.bookingStatus)}`}>
+                                            {item.bookingStatus}
+                                        </span>
+                                    </td>
 
-                                        <button
-                                            onClick={() => openStatusDialog(rental, "Cancelled")}
-                                            className="btn btn-error btn-sm flex-1"
+                                    <td>
+                                        <select
+                                            className="select select-bordered select-xs"
+                                            value={item.bookingStatus}
+                                            onChange={event => {
+                                                setSelectedRental(item);
+                                                setNextStatus(event.target.value);
+                                            }}
                                         >
-                                            Cancel Rental
-                                        </button>
-                                    </div>
-                                )}
-                            </article>
-                        ))}
-                    </div>
-                </>
+                                            <option value="Confirmed">Confirmed</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="Cancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
 
             {/* Confirmation Dialog */}
             {selectedRental && nextStatus && (
                 <div className="modal modal-open">
-                    <div className="modal-box max-w-md">
-
-                        <button
-                            onClick={() => {
-                                setSelectedRental(null);
-                                setNextStatus(null);
-                            }}
-                            className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3"
-                            disabled={actionLoading}
-                        >
-                            <X size={18} />
-                        </button>
-
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-warning/15 text-warning">
-                            <CalendarDays size={22} />
-                        </div>
-
-                        <h3 className="mt-4 text-lg font-bold">
-                            {nextStatus === "Completed"
-                                ? "Complete this rental?"
-                                : "Cancel this rental?"}
+                    <div className="modal-box">
+                        <h3 className="text-lg font-bold">
+                            Update Booking Status?
                         </h3>
 
-                        <p className="mt-2 text-sm text-base-content/70">
-                            Update <strong>{selectedRental.equipmentName}</strong>
-                            {" "}for {selectedRental.customerName} to{" "}
-                            <strong>{nextStatus}</strong>?
+                        <p className="mt-3 text-sm text-base-content/70">
+                            Change the booking status for{" "}
+                            <strong>{selectedRental.equipmentName}</strong>{" "}
+                            to <strong>{nextStatus}</strong>?
                         </p>
 
                         {nextStatus === "Cancelled" && (
-                            <p className="mt-3 rounded-lg bg-warning/10 p-3 text-xs text-warning-content">
-                                This only changes the booking status. It does not issue a Stripe refund or change the payment record.
+                            <p className="mt-3 rounded-lg bg-warning/10 p-3 text-xs">
+                                This changes the booking status only. It does not issue a Stripe refund.
                             </p>
                         )}
 
                         <div className="modal-action">
                             <button
-                                onClick={() => {
-                                    setSelectedRental(null);
-                                    setNextStatus(null);
-                                }}
                                 className="btn btn-ghost"
                                 disabled={actionLoading}
+                                onClick={() => {
+                                    setSelectedRental(null);
+                                    setNextStatus("");
+                                }}
                             >
-                                Keep Booking
+                                Cancel
                             </button>
 
                             <button
-                                onClick={updateStatus}
-                                className={`btn ${nextStatus === "Cancelled"
-                                        ? "btn-error"
-                                        : "btn-primary"
-                                    }`}
+                                className="btn btn-primary"
                                 disabled={actionLoading}
+                                onClick={handleStatusUpdate}
                             >
                                 {actionLoading
-                                    ? <span className="loading loading-spinner loading-sm" />
-                                    : `Confirm ${nextStatus}`}
+                                    ? "Updating..."
+                                    : "Confirm"}
                             </button>
                         </div>
                     </div>
-
-                    <button
-                        className="modal-backdrop"
-                        onClick={() => {
-                            if (!actionLoading) {
-                                setSelectedRental(null);
-                                setNextStatus(null);
-                            }
-                        }}
-                    >
-                        close
-                    </button>
                 </div>
             )}
         </section>
