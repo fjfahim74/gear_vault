@@ -58,6 +58,9 @@ export default function BookingModal({ equipment, onClose }: Props) {
     const [deliveryAddress, setDeliveryAddress] = useState("");
     const [additionalNotes, setAdditionalNotes] = useState("");
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [paymentError, setPaymentError] = useState("");
+
     const [availability, setAvailability] = useState<Availability | null>(null);
     const [availabilityStatus, setAvailabilityStatus] = useState<
         "idle" | "checking" | "available" | "unavailable" | "error"
@@ -208,6 +211,64 @@ export default function BookingModal({ equipment, onClose }: Props) {
         isFormValid &&
         availabilityStatus === "available" &&
         availability?.isAvailable;
+
+    const handlePayment = async () => {
+        try {
+            setIsSubmitting(true);
+            setPaymentError("");
+
+            const token = await getTokenFromClient();
+
+            if (!token) {
+                throw new Error("Please sign in to continue.");
+            }
+
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/bookings/create-checkout-session`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        equipmentId: equipment._id,
+                        startDate,
+                        endDate,
+                        quantity,
+                        contactNumber,
+                        deliveryAddress,
+                        additionalNotes,
+                    }),
+                }
+            );
+
+            const data = await response.json();
+
+            console.log("Checkout API response:", data);
+
+            if (!response.ok) {
+                throw new Error(data.message || "Unable to start payment.");
+            }
+
+            if (!data.data?.redirectUrl) {
+                throw new Error("Stripe checkout URL was not received.");
+            }
+
+            window.location.href = data.data.redirectUrl;
+
+        } catch (error) {
+            console.error("Payment error:", error);
+
+            setPaymentError(
+                error instanceof Error
+                    ? error.message
+                    : "Something went wrong."
+            );
+
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div
@@ -518,19 +579,28 @@ export default function BookingModal({ equipment, onClose }: Props) {
 
                             <button
                                 type="button"
-                                disabled={!canContinue}
-                                title={
-                                    canContinue
-                                        ? "Stripe Checkout will be connected in the next step."
-                                        : "Complete the form and confirm availability first."
-                                }
+                                onClick={handlePayment}
+                                disabled={!canContinue || isSubmitting}
                                 className="btn btn-primary w-full"
                             >
-                                Continue to Payment
+                                {isSubmitting ? (
+                                    <>
+                                        <span className="loading loading-spinner loading-sm" />
+                                        Redirecting to Stripe...
+                                    </>
+                                ) : (
+                                    "Continue to Payment"
+                                )}
                             </button>
 
+                            {paymentError && (
+                                <p className="mt-3 text-center text-sm text-error">
+                                    {paymentError}
+                                </p>
+                            )}
+
                             <p className="mt-3 text-center text-xs text-base-content/50">
-                                Secure checkout will be connected in the next step.
+                                You will be redirected to Stripe's secure checkout page.
                             </p>
                         </div>
                     </aside>
