@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import FavoritesClient from "@/components/dashboard/customer/FavoritesClient";
 
 const FavoritesPage = async () => {
     const session = await auth.api.getSession({
@@ -21,11 +22,7 @@ const FavoritesPage = async () => {
         redirect("/sign-in");
     }
 
-    return (
-        <div>
-            <h1>My Favorites</h1>
-        </div>
-    );
+    return <FavoritesClient />;
 };
 
 export default FavoritesPage;

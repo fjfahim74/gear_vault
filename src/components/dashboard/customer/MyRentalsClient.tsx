@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 interface Rental {
     _id: string;
+    equipmentId: string;
     equipmentName: string;
     equipmentImage: string;
     rentalStartDate: string;
@@ -24,44 +25,47 @@ const MyRentalsClient = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        const fetchRentals = async () => {
-            try {
-                const token = await getTokenFromClient();
+    const fetchRentals = useCallback(async () => {
+        try {
+            setLoading(true);
+            setError("");
 
-                if (!token) {
-                    throw new Error("Please sign in again.");
-                }
+            const token = await getTokenFromClient();
 
-                const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/bookings/my-rentals`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error("Failed to load your rentals.");
-                }
-
-                const data = await response.json();
-                setRentals(data);
-
-            } catch (error) {
-                setError(
-                    error instanceof Error
-                        ? error.message
-                        : "Something went wrong."
-                );
-            } finally {
-                setLoading(false);
+            if (!token) {
+                throw new Error("Please sign in again.");
             }
-        };
 
-        fetchRentals();
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/bookings/my-rentals`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to load your rentals.");
+            }
+
+            const data = await response.json();
+            setRentals(data);
+
+        } catch (error) {
+            setError(
+                error instanceof Error
+                    ? error.message
+                    : "Something went wrong."
+            );
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchRentals();
+    }, [fetchRentals]);
 
     const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString("en-US", {
@@ -78,6 +82,25 @@ const MyRentalsClient = () => {
         }).format(amount);
     };
 
+    const getStatusClass = (status: string) => {
+        switch (status.toLowerCase()) {
+            case "paid":
+            case "confirmed":
+            case "completed":
+                return "badge-success";
+
+            case "pending":
+                return "badge-warning";
+
+            case "cancelled":
+            case "failed":
+                return "badge-error";
+
+            default:
+                return "badge-ghost";
+        }
+    };
+
     return (
         <section className="space-y-6">
             <div>
@@ -88,112 +111,199 @@ const MyRentalsClient = () => {
             </div>
 
             {loading ? (
-                <div className="py-12 text-center">
-                    <span className="loading loading-spinner loading-lg text-primary"></span>
-                    <p className="mt-3">Loading your rentals...</p>
+                <div className="overflow-x-auto rounded-xl border border-base-300 bg-base-100">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                {[
+                                    "Equipment",
+                                    "Start Date",
+                                    "End Date",
+                                    "Booking Date",
+                                    "Total Amount",
+                                    "Payment Status",
+                                    "Booking Status"
+                                ].map((heading) => (
+                                    <th key={heading}>{heading}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <tr key={index}>
+                                    {Array.from({ length: 7 }).map((_, cell) => (
+                                        <td key={cell}>
+                                            <div className="skeleton h-5 w-20"></div>
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             ) : error ? (
-                <div className="alert alert-error">{error}</div>
+                <div className="rounded-xl border border-error/30 bg-base-100 p-8 text-center">
+                    <p className="text-error">{error}</p>
+                    <button
+                        onClick={fetchRentals}
+                        className="btn btn-primary mt-4"
+                    >
+                        Try Again
+                    </button>
+                </div>
             ) : rentals.length === 0 ? (
                 <div className="rounded-xl border border-base-300 bg-base-100 py-16 text-center">
                     <h2 className="text-lg font-semibold">
-                        No Rentals Yet
+                        You haven't rented anything yet
                     </h2>
                     <p className="mt-2 text-sm text-base-content/60">
-                        Your confirmed rentals will appear here.
+                        Explore equipment and make your first rental.
                     </p>
                     <Link
                         href="/equipment"
                         className="btn btn-primary mt-5"
                     >
-                        Explore Equipment
+                        Browse Equipment
                     </Link>
                 </div>
             ) : (
-                <div className="space-y-4">
-                    {rentals.map(rental => (
-                        <div
-                            key={rental._id}
-                            className="flex flex-col gap-5 rounded-xl border border-base-300 bg-base-100 p-5 sm:flex-row"
-                        >
-                            <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-lg bg-base-200 sm:w-48">
-                                {rental.equipmentImage && (
-                                    <Image
-                                        src={rental.equipmentImage}
-                                        alt={rental.equipmentName}
-                                        fill
-                                        className="object-cover"
-                                        sizes="(max-width: 640px) 100vw, 192px"
-                                    />
-                                )}
-                            </div>
+                <>
+                    {/* Desktop Table */}
+                    <div className="hidden overflow-x-auto rounded-xl border border-base-300 bg-base-100 md:block">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Equipment Name</th>
+                                    <th>Rental Start Date</th>
+                                    <th>Rental End Date</th>
+                                    <th>Booking Date</th>
+                                    <th>Total Amount</th>
+                                    <th>Payment Status</th>
+                                    <th>Booking Status</th>
+                                </tr>
+                            </thead>
 
-                            <div className="flex-1 space-y-3">
-                                <div className="flex flex-wrap items-center justify-between gap-2">
-                                    <h2 className="text-lg font-semibold">
+                            <tbody>
+                                {rentals.map((rental) => (
+                                    <tr key={rental._id}>
+                                        <td>
+                                            <Link
+                                                href={`/equipment/${rental.equipmentId}`}
+                                                className="flex items-center gap-3 font-medium hover:text-primary"
+                                            >
+                                                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-base-200">
+                                                    {rental.equipmentImage && (
+                                                        <Image
+                                                            src={rental.equipmentImage}
+                                                            alt={rental.equipmentName}
+                                                            fill
+                                                            sizes="48px"
+                                                            className="object-cover"
+                                                        />
+                                                    )}
+                                                </div>
+                                                <span className="min-w-32">
+                                                    {rental.equipmentName}
+                                                </span>
+                                            </Link>
+                                        </td>
+
+                                        <td>{formatDate(rental.rentalStartDate)}</td>
+                                        <td>{formatDate(rental.rentalEndDate)}</td>
+                                        <td>{formatDate(rental.createdAt)}</td>
+
+                                        <td className="font-semibold">
+                                            {formatAmount(
+                                                rental.totalAmount,
+                                                rental.currency
+                                            )}
+                                        </td>
+
+                                        <td>
+                                            <span className={`badge ${getStatusClass(rental.paymentStatus)}`}>
+                                                {rental.paymentStatus}
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <span className={`badge ${getStatusClass(rental.bookingStatus)}`}>
+                                                {rental.bookingStatus}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Mobile Cards */}
+                    <div className="space-y-4 md:hidden">
+                        {rentals.map((rental) => (
+                            <div
+                                key={rental._id}
+                                className="rounded-xl border border-base-300 bg-base-100 p-4"
+                            >
+                                <Link
+                                    href={`/equipment/${rental.equipmentId}`}
+                                    className="flex items-center gap-3"
+                                >
+                                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-base-200">
+                                        {rental.equipmentImage && (
+                                            <Image
+                                                src={rental.equipmentImage}
+                                                alt={rental.equipmentName}
+                                                fill
+                                                sizes="56px"
+                                                className="object-cover"
+                                            />
+                                        )}
+                                    </div>
+
+                                    <h2 className="font-semibold hover:text-primary">
                                         {rental.equipmentName}
                                     </h2>
+                                </Link>
 
-                                    <span className="badge badge-success">
+                                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                                    <div>
+                                        <p className="text-base-content/60">Start Date</p>
+                                        <p>{formatDate(rental.rentalStartDate)}</p>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-base-content/60">End Date</p>
+                                        <p>{formatDate(rental.rentalEndDate)}</p>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-base-content/60">Booking Date</p>
+                                        <p>{formatDate(rental.createdAt)}</p>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-base-content/60">Total Amount</p>
+                                        <p className="font-semibold">
+                                            {formatAmount(
+                                                rental.totalAmount,
+                                                rental.currency
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 flex flex-wrap gap-2 border-t border-base-300 pt-3">
+                                    <span className={`badge ${getStatusClass(rental.paymentStatus)}`}>
+                                        Payment: {rental.paymentStatus}
+                                    </span>
+
+                                    <span className={`badge ${getStatusClass(rental.bookingStatus)}`}>
                                         {rental.bookingStatus}
                                     </span>
                                 </div>
-
-                                <div className="grid gap-3 text-sm sm:grid-cols-2">
-                                    <p>
-                                        <span className="text-base-content/60">
-                                            Rental Period:
-                                        </span>
-                                        <br />
-                                        {formatDate(rental.rentalStartDate)}
-                                        {" - "}
-                                        {formatDate(rental.rentalEndDate)}
-                                    </p>
-
-                                    <p>
-                                        <span className="text-base-content/60">
-                                            Booking Date:
-                                        </span>
-                                        <br />
-                                        {formatDate(rental.createdAt)}
-                                    </p>
-
-                                    <p>
-                                        <span className="text-base-content/60">
-                                            Quantity:
-                                        </span>
-                                        <br />
-                                        {rental.quantity}
-                                    </p>
-
-                                    <p>
-                                        <span className="text-base-content/60">
-                                            Payment Status:
-                                        </span>
-                                        <br />
-                                        <span className="font-medium text-success">
-                                            {rental.paymentStatus}
-                                        </span>
-                                    </p>
-                                </div>
-
-                                <div className="flex flex-wrap items-center justify-between border-t border-base-300 pt-3">
-                                    <p className="font-semibold">
-                                        Total:{" "}
-                                        {formatAmount(
-                                            rental.totalAmount,
-                                            rental.currency
-                                        )}
-                                    </p>
-
-                                    <span className="text-xs text-base-content/50">
-                                        Booking ID: {rental._id.slice(-8)}
-                                    </span>
-                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                </>
             )}
         </section>
     );
