@@ -33,6 +33,7 @@ const PaymentSuccessPage = () => {
     const [loading, setLoading] = useState(true);
     const [booking, setBooking] = useState<Booking | null>(null);
     const [payment, setPayment] = useState<Payment | null>(null);
+    const [verificationError, setVerificationError] = useState("");
 
     useEffect(() => {
         const verifyPayment = async () => {
@@ -76,6 +77,11 @@ const PaymentSuccessPage = () => {
 
             } catch (error) {
                 console.error("Payment verification error:", error);
+                setVerificationError(
+                    error instanceof Error
+                        ? error.message
+                        : "Unable to verify your payment."
+                );
             } finally {
                 setLoading(false);
             }
@@ -275,8 +281,16 @@ const PaymentSuccessPage = () => {
                         </h1>
 
                         <p className="mt-3 text-sm leading-relaxed text-base-content/60">
-                            If you were charged, your booking will appear in My Rentals shortly.
+                            {verificationError ||
+                                "We couldn't verify your payment. Please try again."}
                         </p>
+
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="btn btn-outline mt-5 w-full"
+                        >
+                            Try Verification Again
+                        </button>
 
                         <div className="mt-7 flex flex-col gap-3 sm:flex-row">
 
