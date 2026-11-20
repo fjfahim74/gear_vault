@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { MapPin, ArrowLeft } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import BookingModal from "./BookingModal";
+import FavoriteButton from "./FavoriteButton";
+import Link from "next/link";
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 type Equipment = {
@@ -32,6 +35,12 @@ export default function EquipmentDetailsClient({ equipmentId }: Props) {
     const [equipment, setEquipment] = useState<Equipment | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    const [isBookingOpen, setIsBookingOpen] = useState(false);
+
+    const { data: session, isPending } = authClient.useSession();
+
+    const role = session?.user?.role;
 
     useEffect(() => {
         const fetchEquipment = async () => {
@@ -215,9 +224,38 @@ export default function EquipmentDetailsClient({ equipmentId }: Props) {
                                 {equipment.rentalType}
                             </p>
                         </div>
+                        <button
+                            type="button"
+                            onClick={() => setIsBookingOpen(true)}
+                            disabled={
+                                isPending ||
+                                role !== "Customer" ||
+                                equipment.availableQuantity <= 0
+                            }
+                            title={
+                                role !== "Customer" && !isPending
+                                    ? "Switch to a customer account to rent equipment."
+                                    : ""
+                            }
+                            className="btn btn-primary mt-6 w-full"
+                        >
+                            {equipment.availableQuantity > 0
+                                ? "Book Now"
+                                : "Currently Unavailable"}
+                        </button>
+
+                        <div className="mt-5 border-t border-base-300 pt-5">
+                            <FavoriteButton equipmentId={equipment._id} />
+                        </div>
                     </aside>
                 </div>
             </div>
+            {isBookingOpen && (
+                <BookingModal
+                    equipment={equipment}
+                    onClose={() => setIsBookingOpen(false)}
+                />
+            )}
         </main>
     );
 }
