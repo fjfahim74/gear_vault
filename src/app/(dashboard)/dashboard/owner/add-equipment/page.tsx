@@ -344,20 +344,6 @@ const AddEquipmentPage = async () => {
                     </div>
                 </div>
 
-                {/* Submit Button */}
-                <div className="flex justify-end">
-                    <button
-                        type="submit"
-                        className="btn btn-primary px-8"
-                    >
-                        Add Equipment
-                    </button>
-                </div>
-
-                <p className="text-right text-xs text-base-content/50">
-                    Form submission will be connected in the next step.
-                </p>
-
             </EquipmentForm>
         </div>
     );
