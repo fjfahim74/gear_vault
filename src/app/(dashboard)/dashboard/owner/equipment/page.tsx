@@ -159,22 +159,31 @@ const MyEquipmentPage = () => {
                                         </span>
                                     </td>
 
-                                    <td className="flex gap-2">
-                                        <Link
-                                            href={`/dashboard/owner/equipment/${item._id}/edit`}
-                                            className="btn btn-sm btn-outline btn-primary"
-                                        >
-                                            <Pencil size={16} />
-                                            Edit
-                                        </Link>
+                                    <td>
+                                        <div className="flex gap-2">
+                                            <Link
+                                                href={`/equipment/${item._id}`}
+                                                className="btn btn-sm btn-outline"
+                                            >
+                                                View
+                                            </Link>
 
-                                        <button
-                                            onClick={() => handleDelete(item._id)}
-                                            className="btn btn-sm btn-error btn-outline"
-                                        >
-                                            <Trash2 size={16} />
-                                            Delete
-                                        </button>
+                                            <Link
+                                                href={`/dashboard/owner/equipment/${item._id}/edit`}
+                                                className="btn btn-sm btn-outline btn-primary"
+                                            >
+                                                <Pencil size={16} />
+                                                Edit
+                                            </Link>
+
+                                            <button
+                                                onClick={() => handleDelete(item._id)}
+                                                className="btn btn-sm btn-error btn-outline"
+                                            >
+                                                <Trash2 size={16} />
+                                                Delete
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

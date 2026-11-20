@@ -28,6 +28,7 @@ const roleBasedMenuItems = {
         { title: "Add Equipment", href: "/dashboard/owner/add-equipment" },
         { title: "My Equipment", href: "/dashboard/owner/equipment" },
         { title: "Profile", href: "/dashboard/owner/profile" },
+        { title: "My Equipment Rental", href: "/dashboard/owner/rentals" },
     ],
     Admin: [
         { title: "Admin Overview", href: "/dashboard/admin" },
