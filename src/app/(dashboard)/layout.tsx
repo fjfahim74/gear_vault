@@ -11,6 +11,7 @@ import {
     UserCircle,
     Heart,
     Users,
+    Boxes,
     ExternalLink,
 } from "lucide-react";
 
@@ -76,12 +77,12 @@ const adminLinks = [
     {
         title: "All Users",
         href: "/dashboard/admin/users",
-        icon: Users,
+        icon: UserCircle,
     },
     {
-        title: "My Profile",
-        href: "/dashboard/admin/profile",
-        icon: UserCircle,
+        title: "All Equipment",
+        href: "/dashboard/admin/equipment",
+        icon: Boxes,
     },
 ];
 
