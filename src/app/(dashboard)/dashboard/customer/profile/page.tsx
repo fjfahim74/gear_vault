@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import ProfileClient from "@/components/dashboard/ProfileClient";
 
 const CustomerProfilePage = async () => {
     const session = await auth.api.getSession({
@@ -14,18 +15,10 @@ const CustomerProfilePage = async () => {
     const role = session.user.role;
 
     if (role !== "Customer") {
-        if (role === "Owner" || role === "Admin") {
-            redirect(`/dashboard/${role.toLowerCase()}`);
-        }
-
-        redirect("/sign-in");
+        const role = session.user.role ?? "Customer";
     }
 
-    return (
-        <div>
-            <h1>My Profile</h1>
-        </div>
-    );
+    return <ProfileClient />;
 };
 
 export default CustomerProfilePage;

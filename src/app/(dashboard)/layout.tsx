@@ -10,6 +10,7 @@ import {
     CalendarDays,
     UserCircle,
     Heart,
+    Users,
     ExternalLink,
 } from "lucide-react";
 
@@ -71,6 +72,16 @@ const adminLinks = [
         title: "Overview",
         href: "/dashboard/admin",
         icon: LayoutDashboard,
+    },
+    {
+        title: "All Users",
+        href: "/dashboard/admin/users",
+        icon: Users,
+    },
+    {
+        title: "My Profile",
+        href: "/dashboard/admin/profile",
+        icon: UserCircle,
     },
 ];
 
