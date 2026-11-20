@@ -1,0 +1,108 @@
+"use client";
+
+import { useState, type ReactNode, type FormEvent } from "react";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
+
+type EquipmentFormProps = {
+    children: ReactNode;
+};
+
+const EquipmentForm = ({ children }: EquipmentFormProps) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        const imageUploadStatus = formData.get("imageUploadStatus");
+        const imageUrl = formData.get("imageUrl");
+
+        if (imageUploadStatus === "uploading") {
+            alert("Please wait until the image upload is complete.");
+            return;
+        }
+
+        if (imageUploadStatus !== "uploaded" || !imageUrl) {
+            alert("Please upload an equipment image.");
+            return;
+        }
+
+        const rentalPrice = Number(formData.get("price"));
+        const availableQuantity = Number(formData.get("quantity"));
+
+        if (rentalPrice <= 0 || availableQuantity <= 0) {
+            alert("Rental price and available quantity must be greater than zero.");
+            return;
+        }
+
+        if (!Number.isInteger(availableQuantity)) {
+            alert("Available quantity must be a whole number.");
+            return;
+        }
+
+        const equipmentData = {
+            name: formData.get("name"),
+            description: formData.get("description"),
+            category: formData.get("category"),
+            location: formData.get("location"),
+            rentalPrice,
+            rentalType: formData.get("rentalType"),
+            availableQuantity,
+            condition: formData.get("condition"),
+            brand: formData.get("brand"),
+            model: formData.get("model"),
+            rentalTerms: formData.get("terms"),
+            imageUrl: formData.get("imageUrl"),
+        };
+
+        try {
+            setIsSubmitting(true);
+
+            const token = await getTokenFromClient();
+
+            if (!token) {
+                throw new Error("Authentication required. Please sign in again.");
+            }
+
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/equipment`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(equipmentData),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to add equipment.");
+            }
+
+            alert("Equipment submitted successfully! Waiting for admin approval.");
+        } catch (error) {
+            console.error("Equipment submission error:", error);
+            alert(error instanceof Error ? error.message : "Something went wrong.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6">
+            {children}
+
+            <div className="flex justify-end">
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn btn-primary px-8"
+                >
+                    {isSubmitting ? "Submitting..." : "Add Equipment"}
+                </button>
+            </div>
+        </form>
+    );
+};
+
+export default EquipmentForm;
