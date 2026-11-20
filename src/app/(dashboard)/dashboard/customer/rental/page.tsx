@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import MyRentalsClient from "@/components/dashboard/customer/MyRentalsClient";
 
 const MyRentalsPage = async () => {
     const session = await auth.api.getSession({
@@ -17,11 +18,7 @@ const MyRentalsPage = async () => {
         redirect(`/dashboard/${role.toLowerCase()}`);
     }
 
-    return (
-        <div>
-            <h1>My Rentals</h1>
-        </div>
-    );
+    return <MyRentalsClient />;
 };
 
 export default MyRentalsPage;
