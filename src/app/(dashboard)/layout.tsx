@@ -15,13 +15,13 @@ const DashboardLayout = async ({
     });
 
     if (!session) {
-        redirect("/login");
+        redirect("/sign-in")
     }
 
     const role = session.user.role ?? "Customer";
 
     if (!["Customer", "Owner", "Admin"].includes(role)) {
-        redirect("/login");
+        redirect("/sign-in")
     }
 
     return (

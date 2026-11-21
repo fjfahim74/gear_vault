@@ -9,7 +9,7 @@ const AdminEditEquipmentPage = async () => {
     });
 
     if (!session) {
-        redirect("/login");
+        redirect("/sign-in")
     }
 
     const role = session.user.role ?? "Customer";
