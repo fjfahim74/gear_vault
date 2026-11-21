@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/auth-guard";
 import DashboardShellClient from "@/components/dashboard/DashboardShellClient";
 
 const DashboardLayout = async ({
@@ -10,18 +9,11 @@ const DashboardLayout = async ({
 }: {
     children: ReactNode;
 }) => {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    });
-
-    if (!session) {
-        redirect("/sign-in")
-    }
-
+    const session = await getCurrentSession();
     const role = session.user.role ?? "Customer";
 
-    if (!["Customer", "Owner", "Admin"].includes(role)) {
-        redirect("/sign-in")
+    if (!(["Customer", "Owner", "Admin"] as string[]).includes(role)) {
+        redirect("/sign-in");
     }
 
     return (

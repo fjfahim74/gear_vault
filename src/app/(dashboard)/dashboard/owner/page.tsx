@@ -1,22 +1,8 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/auth-guard";
 import OwnerDashboardClient from "@/components/dashboard/owner/OwnerDashboardClient";
 
 const OwnerDashboardPage = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    });
-
-    if (!session) {
-        redirect("/sign-in");
-    }
-
-    const role = session.user.role ?? "Customer";
-
-    if (role !== "Owner") {
-        redirect(`/dashboard/${role.toLowerCase()}`);
-    }
+    const session = await getCurrentSession();
 
     return (
         <OwnerDashboardClient userName={session.user.name || "Owner"} />

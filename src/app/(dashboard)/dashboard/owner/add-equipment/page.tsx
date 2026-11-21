@@ -1,6 +1,4 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/auth-guard";
 import { PackagePlus, Info } from "lucide-react";
 import EquipmentForm from "@/components/dashboard/owner/EquipmentForm";
 import EquipmentImageUpload from "@/components/dashboard/owner/EquipmentImageUpload";
@@ -21,19 +19,7 @@ const labelClass =
     "mb-2 block text-sm font-medium text-base-content/80";
 
 const AddEquipmentPage = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-
-    if (!session) {
-        redirect("/sign-in");
-    }
-
-    const role = session.user.role ?? "Customer";
-
-    if (role !== "Owner") {
-        redirect(`/dashboard/${role.toLowerCase()}`);
-    }
+    const session = await getCurrentSession();
 
     return (
         <div className="mx-auto max-w-5xl">
