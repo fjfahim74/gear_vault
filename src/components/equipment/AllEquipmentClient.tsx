@@ -23,13 +23,19 @@ const categories = [
     "Event Equipment",
 ];
 
-export default function AllEquipmentClient() {
+export default function AllEquipmentClient({
+    initialCategory,
+}: {
+    initialCategory: string;
+}) {
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     const [search, setSearch] = useState("");
-    const [category, setCategory] = useState("");
+    const [category, setCategory] = useState(
+        categories.includes(initialCategory) ? initialCategory : ""
+    );
     const [rentalType, setRentalType] = useState("");
     const [availability, setAvailability] = useState("");
     const [minPrice, setMinPrice] = useState("");

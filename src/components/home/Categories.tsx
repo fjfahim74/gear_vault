@@ -88,7 +88,7 @@ export default function Categories() {
                                 transition={{ duration: 0.4, delay: index * 0.08 }}
                             >
                                 <Link
-                                    href={`/equipment?category=${category.slug}`}
+                                    href={`/equipment?category=${encodeURIComponent(category.name)}`}
                                     className="group relative block aspect-square overflow-hidden rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-primary sm:aspect-[4/3]"
                                 >
                                     <div

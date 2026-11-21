@@ -3,7 +3,15 @@ import Container from "@/components/shared/Container";
 import PageHeader from "@/components/shared/PageHeader";
 import AllEquipmentClient from "@/components/equipment/AllEquipmentClient";
 
-export default function AllEquipmentPage() {
+type Props = {
+    searchParams: Promise<{
+        category?: string;
+    }>;
+};
+
+export default async function AllEquipmentPage({ searchParams }: Props) {
+    const params = await searchParams;
+
     return (
         <div className="min-h-screen bg-base-100">
 
@@ -29,7 +37,7 @@ export default function AllEquipmentPage() {
 
             {/* Marketplace Content */}
             <Container>
-                <AllEquipmentClient />
+                <AllEquipmentClient initialCategory={params.category ?? ""} />
             </Container>
 
         </div>
