@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode, type FormEvent } from "react";
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
+import { toast } from "react-toastify";
 
 type EquipmentFormProps = {
     children: ReactNode;
@@ -17,12 +18,12 @@ const EquipmentForm = ({ children }: EquipmentFormProps) => {
         const imageUrl = formData.get("imageUrl");
 
         if (imageUploadStatus === "uploading") {
-            alert("Please wait until the image upload is complete.");
+            toast.info("Please wait until the image upload is complete.");
             return;
         }
 
         if (imageUploadStatus !== "uploaded" || !imageUrl) {
-            alert("Please upload an equipment image.");
+            toast.error("Please upload an equipment image.");
             return;
         }
 
@@ -30,12 +31,12 @@ const EquipmentForm = ({ children }: EquipmentFormProps) => {
         const availableQuantity = Number(formData.get("quantity"));
 
         if (rentalPrice <= 0 || availableQuantity <= 0) {
-            alert("Rental price and available quantity must be greater than zero.");
+            toast.error("Rental price and available quantity must be greater than zero.");
             return;
         }
 
         if (!Number.isInteger(availableQuantity)) {
-            alert("Available quantity must be a whole number.");
+            toast.error("Available quantity must be a whole number.");
             return;
         }
 
@@ -79,10 +80,10 @@ const EquipmentForm = ({ children }: EquipmentFormProps) => {
                 throw new Error("Failed to add equipment.");
             }
 
-            alert("Equipment submitted successfully! Waiting for admin approval.");
+            toast.success("Equipment submitted successfully! Waiting for admin approval.");
         } catch (error) {
             console.error("Equipment submission error:", error);
-            alert(error instanceof Error ? error.message : "Something went wrong.");
+            toast.error(error instanceof Error ? error.message : "Something went wrong.");
         } finally {
             setIsSubmitting(false);
         }
