@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 
 export default function SignInPage() {
     const router = useRouter();
@@ -14,7 +14,6 @@ export default function SignInPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-    const [isGithubLoading, setIsGithubLoading] = useState(false);
 
     const hasShownToast = useRef(false);
 
@@ -44,25 +43,6 @@ export default function SignInPage() {
         } catch {
             toast.error("Something went wrong. Please try again.");
             setIsGoogleLoading(false);
-        }
-    };
-
-    const handleGithubSignIn = async () => {
-        setIsGithubLoading(true);
-
-        try {
-            const { error } = await authClient.signIn.social({
-                provider: "github",
-                callbackURL: "/",
-            });
-
-            if (error) {
-                toast.error(error.message || "GitHub sign in failed.");
-                setIsGithubLoading(false);
-            }
-        } catch {
-            toast.error("Something went wrong. Please try again.");
-            setIsGithubLoading(false);
         }
     };
 
@@ -188,27 +168,13 @@ export default function SignInPage() {
                     <button
                         type="button"
                         onClick={handleGoogleSignIn}
-                        disabled={isGoogleLoading || isGithubLoading || isLoading}
+                        disabled={isGoogleLoading || isLoading}
                         className="w-full rounded-lg border border-base-300 py-3 font-medium text-base-content/80 transition hover:bg-base-300 disabled:opacity-60"
                     >
                         {isGoogleLoading ? "Connecting..." : (
                             <span className="flex items-center justify-center gap-2">
                                 <FaGoogle />
                                 Continue with Google
-                            </span>
-                        )}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={handleGithubSignIn}
-                        disabled={isGithubLoading || isGoogleLoading || isLoading}
-                        className="w-full rounded-lg border border-base-300 py-3 font-medium text-base-content/80 transition hover:bg-base-300 disabled:opacity-60"
-                    >
-                        {isGithubLoading ? "Connecting..." : (
-                            <span className="flex items-center justify-center gap-2">
-                                <FaGithub />
-                                Continue with GitHub
                             </span>
                         )}
                     </button>
