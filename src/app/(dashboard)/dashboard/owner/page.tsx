@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import OwnerDashboardClient from "@/components/dashboard/owner/OwnerDashboardClient";
 
 const OwnerDashboardPage = async () => {
     const session = await auth.api.getSession({
@@ -18,9 +19,7 @@ const OwnerDashboardPage = async () => {
     }
 
     return (
-        <div>
-            <h1>Owner Dashboard</h1>
-        </div>
+        <OwnerDashboardClient userName={session.user.name || "Owner"} />
     );
 };
 
