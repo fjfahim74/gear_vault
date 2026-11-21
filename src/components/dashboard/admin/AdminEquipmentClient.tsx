@@ -104,10 +104,10 @@ const AdminEquipmentClient = () => {
         return searchMatch && statusMatch;
     });
 
-    const getStatusBadge = (status: Equipment["status"]) => {
-        if (status === "Approved") return "badge-success";
-        if (status === "Rejected") return "badge-error";
-        return "badge-warning";
+    const getStatusStyle = (status: Equipment["status"]) => {
+        if (status === "Approved") return "text-success";
+        if (status === "Rejected") return "text-error";
+        return "text-warning";
     };
 
     const getStatusCount = (status: string) => {
@@ -357,12 +357,12 @@ const AdminEquipmentClient = () => {
                         key={status}
                         onClick={() => setStatusFilter(status)}
                         className={`btn btn-sm ${statusFilter === status
-                                ? "btn-primary"
-                                : "btn-outline"
+                            ? "btn-primary"
+                            : "btn-outline"
                             }`}
                     >
                         {status}
-                        <span className="badge badge-sm">
+                        <span className="text-xs font-medium opacity-70">
                             {getStatusCount(status)}
                         </span>
                     </button>
@@ -462,7 +462,7 @@ const AdminEquipmentClient = () => {
                                         <td>{item.availableQuantity}</td>
 
                                         <td>
-                                            <span className={`badge ${getStatusBadge(item.status)}`}>
+                                            <span className={`text-sm font-medium ${getStatusStyle(item.status)}`}>
                                                 {item.status}
                                             </span>
                                         </td>
@@ -501,7 +501,7 @@ const AdminEquipmentClient = () => {
                                             {item.category}
                                         </p>
 
-                                        <span className={`badge badge-sm mt-2 ${getStatusBadge(item.status)}`}>
+                                        <span className={`mt-2 block text-sm font-medium ${getStatusStyle(item.status)}`}>
                                             {item.status}
                                         </span>
                                     </div>
@@ -595,9 +595,9 @@ const AdminEquipmentClient = () => {
 
                             <button
                                 className={`btn ${dialogAction === "Reject" ||
-                                        dialogAction === "Delete"
-                                        ? "btn-error"
-                                        : "btn-primary"
+                                    dialogAction === "Delete"
+                                    ? "btn-error"
+                                    : "btn-primary"
                                     }`}
                                 disabled={actionLoading}
                                 onClick={handleConfirmAction}

@@ -76,19 +76,22 @@ const OwnerRentalsClient = () => {
             currency: currency.toUpperCase()
         }).format(amount);
 
-    const statusClass = (status: string) => {
+    const getStatusStyle = (status: string) => {
         switch (status.toLowerCase()) {
             case "paid":
             case "confirmed":
             case "completed":
-                return "badge-success";
+                return "text-success";
+
             case "pending":
-                return "badge-warning";
+                return "text-warning";
+
             case "cancelled":
             case "failed":
-                return "badge-error";
+                return "text-error";
+
             default:
-                return "badge-ghost";
+                return "text-base-content/70";
         }
     };
 
@@ -170,13 +173,13 @@ const OwnerRentalsClient = () => {
                                     </td>
 
                                     <td>
-                                        <span className={`badge ${statusClass(rental.paymentStatus)}`}>
+                                        <span className={`text-sm font-medium ${getStatusStyle(rental.paymentStatus)}`}>
                                             {rental.paymentStatus}
                                         </span>
                                     </td>
 
                                     <td>
-                                        <span className={`badge ${statusClass(rental.bookingStatus)}`}>
+                                        <span className={`text-sm font-medium ${getStatusStyle(rental.bookingStatus)}`}>
                                             {rental.bookingStatus}
                                         </span>
                                     </td>

@@ -89,10 +89,10 @@ const UsersClient = ({ currentUserId }: UsersClientProps) => {
         });
     };
 
-    const getRoleBadge = (role: User["role"]) => {
-        if (role === "Admin") return "badge-primary";
-        if (role === "Owner") return "badge-info";
-        return "badge-ghost";
+    const getRoleStyle = (role: User["role"]) => {
+        if (role === "Admin") return "text-primary";
+        if (role === "Owner") return "text-info";
+        return "text-base-content/70";
     };
 
     const handleRoleUpdate = async () => {
@@ -326,7 +326,7 @@ const UsersClient = ({ currentUserId }: UsersClientProps) => {
                                             </td>
 
                                             <td>
-                                                <span className={`badge ${getRoleBadge(user.role)}`}>
+                                                <span className={`text-sm font-medium ${getRoleStyle(user.role)}`}>
                                                     {user.role}
                                                 </span>
                                             </td>
@@ -416,7 +416,7 @@ const UsersClient = ({ currentUserId }: UsersClientProps) => {
                                                 {user.email}
                                             </p>
 
-                                            <span className={`badge mt-2 ${getRoleBadge(user.role)}`}>
+                                            <span className={`text-sm font-medium ${getRoleStyle(user.role)}`}>
                                                 {user.role}
                                             </span>
                                         </div>

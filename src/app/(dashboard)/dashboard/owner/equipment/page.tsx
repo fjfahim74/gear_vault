@@ -148,11 +148,11 @@ const MyEquipmentPage = () => {
 
                                     <td>
                                         <span
-                                            className={`badge ${item.status === "Approved"
-                                                ? "badge-success"
-                                                : item.status === "Rejected"
-                                                    ? "badge-error"
-                                                    : "badge-warning"
+                                            className={`text-sm font-medium ${item.status === "Approved"
+                                                    ? "text-success"
+                                                    : item.status === "Rejected"
+                                                        ? "text-error"
+                                                        : "text-warning"
                                                 }`}
                                         >
                                             {item.status}

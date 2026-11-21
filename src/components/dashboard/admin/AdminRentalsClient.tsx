@@ -100,21 +100,21 @@ const AdminRentalsClient = () => {
         return searchMatch && bookingMatch && paymentMatch;
     });
 
-    // Status badge
-    const getStatusBadge = (status: string) => {
+    // Status text color
+    const getStatusStyle = (status: string) => {
         if (["Paid", "Completed"].includes(status)) {
-            return "badge-success";
+            return "text-success";
         }
 
-        if (["Confirmed"].includes(status)) {
-            return "badge-info";
+        if (status === "Confirmed") {
+            return "text-info";
         }
 
         if (["Cancelled", "Failed"].includes(status)) {
-            return "badge-error";
+            return "text-error";
         }
 
-        return "badge-warning";
+        return "text-warning";
     };
 
     // Format date
@@ -354,13 +354,13 @@ const AdminRentalsClient = () => {
                                     </td>
 
                                     <td>
-                                        <span className={`badge ${getStatusBadge(item.paymentStatus)}`}>
+                                        <span className={`text-sm font-medium ${getStatusStyle(item.paymentStatus)}`}>
                                             {item.paymentStatus}
                                         </span>
                                     </td>
 
                                     <td>
-                                        <span className={`badge ${getStatusBadge(item.bookingStatus)}`}>
+                                        <span className={`text-sm font-medium ${getStatusStyle(item.bookingStatus)}`}>
                                             {item.bookingStatus}
                                         </span>
                                     </td>
