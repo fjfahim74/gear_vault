@@ -9,7 +9,7 @@ const CustomerProfilePage = async () => {
     });
 
     if (!session) {
-        redirect("/sign-in");
+        redirect("/login");
     }
 
     const role = session.user.role;
