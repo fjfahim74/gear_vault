@@ -142,7 +142,7 @@ const DashboardShellClient = ({
     };
 
     return (
-        <div className="min-h-screen bg-base-200/50 lg:flex">
+        <div className="min-h-screen w-full overflow-x-clip bg-base-200/50 lg:flex">
 
             {/* Mobile Backdrop */}
             {menuOpen && (
@@ -206,8 +206,8 @@ const DashboardShellClient = ({
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center gap-3 rounded-lg border-l-[3px] px-3 py-3 text-sm font-medium transition ${isActive
-                                        ? "border-primary bg-primary/10 text-primary"
-                                        : "border-transparent text-base-content/70 hover:bg-base-200"
+                                    ? "border-primary bg-primary/10 text-primary"
+                                    : "border-transparent text-base-content/70 hover:bg-base-200"
                                     }`}
                             >
                                 <Icon size={19} />
@@ -239,7 +239,7 @@ const DashboardShellClient = ({
             </aside>
 
             {/* Main Content */}
-            <div className="min-w-0 flex-1">
+            <div className="min-h-screen w-full min-w-0 flex-1">
 
                 {/* Topbar */}
                 <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-base-300 bg-base-100 px-5 sm:px-8">
