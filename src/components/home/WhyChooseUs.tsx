@@ -32,7 +32,7 @@ const benefits = [
 
 export default function WhyChooseUs() {
     return (
-        <section className="bg-base-200 py-20">
+        <section id="about" className="bg-base-200 py-20">
             <div className="mx-auto grid max-w-7xl gap-12 px-5 md:grid-cols-12 md:items-center">
                 <div className="md:col-span-5">
                     <p className="mb-3 font-semibold text-accent">

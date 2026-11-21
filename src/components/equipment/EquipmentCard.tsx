@@ -79,8 +79,8 @@ export default function EquipmentCard({ equipment }: EquipmentCardProps) {
                     {quantity !== undefined && (
                         <span
                             className={`rounded-full px-3 py-1 text-xs font-semibold ${quantity <= 0
-                                    ? "bg-base-200 text-base-content/60"
-                                    : "bg-success/15 text-success"
+                                ? "bg-base-200 text-base-content/60"
+                                : "bg-success/15 text-success"
                                 }`}
                         >
                             {quantity <= 0
@@ -93,7 +93,7 @@ export default function EquipmentCard({ equipment }: EquipmentCardProps) {
 
                 <Link
                     href={`/equipment/${equipment._id}`}
-                    className="mt-auto block w-full rounded-lg border border-secondary py-2.5 text-center text-sm font-semibold text-secondary transition hover:bg-secondary hover:text-secondary-content"
+                    className="mt-auto block w-full rounded-lg border border-accent py-2.5 text-center text-sm font-semibold text-accent transition hover:bg-accent hover:text-accent-content"
                 >
                     View Details
                 </Link>

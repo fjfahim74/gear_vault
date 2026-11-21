@@ -83,7 +83,7 @@ const Hero = () => {
                                 if (isPending) event.preventDefault();
                             }}
                             aria-disabled={isPending}
-                            className={`btn h-13 border border-secondary bg-transparent px-6 text-base font-semibold text-secondary hover:bg-secondary/10 ${isPending ? "pointer-events-none opacity-60" : ""
+                            className={`btn h-13 border border-accent bg-transparent px-6 text-base font-semibold text-accent hover:bg-accent hover:text-accent-content ${isPending ? "pointer-events-none opacity-60" : ""
                                 }`}
                         >
                             {listingLabel}

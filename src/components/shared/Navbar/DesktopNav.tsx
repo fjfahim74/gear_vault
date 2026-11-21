@@ -21,8 +21,8 @@ const DesktopNav = ({
                 <Link
                     href="/"
                     className={`text-sm font-medium transition ${pathname === "/"
-                            ? "font-semibold text-primary"
-                            : "text-base-content hover:text-primary"
+                        ? "font-semibold text-primary"
+                        : "text-base-content hover:text-primary"
                         }`}
                 >
                     Home
@@ -31,49 +31,33 @@ const DesktopNav = ({
                 <Link
                     href="/equipment"
                     className={`text-sm font-medium transition ${pathname.startsWith("/equipment")
-                            ? "font-semibold text-primary"
-                            : "text-base-content hover:text-primary"
+                        ? "font-semibold text-primary"
+                        : "text-base-content hover:text-primary"
                         }`}
                 >
                     All Equipment
                 </Link>
 
                 <Link
-                    href="/how-it-works"
-                    className={`text-sm font-medium transition ${pathname === "/how-it-works"
-                            ? "font-semibold text-primary"
-                            : "text-base-content hover:text-primary"
-                        }`}
+                    href="/#howitworks"
+                    className="text-sm font-medium text-base-content transition hover:text-primary"
                 >
-                    How It Works
+                    Rental Process
                 </Link>
 
                 <Link
-                    href="/about"
-                    className={`text-sm font-medium transition ${pathname === "/about"
-                            ? "font-semibold text-primary"
-                            : "text-base-content hover:text-primary"
-                        }`}
+                    href="/#about"
+                    className="text-sm font-medium text-base-content transition hover:text-primary"
                 >
                     About
-                </Link>
-
-                <Link
-                    href="/contact"
-                    className={`text-sm font-medium transition ${pathname === "/contact"
-                            ? "font-semibold text-primary"
-                            : "text-base-content hover:text-primary"
-                        }`}
-                >
-                    Contact
                 </Link>
 
                 {!isPending && session && (
                     <Link
                         href="/dashboard"
                         className={`text-sm font-semibold transition ${pathname.startsWith("/dashboard")
-                                ? "text-primary"
-                                : "text-base-content hover:text-primary"
+                            ? "text-primary"
+                            : "text-base-content hover:text-primary"
                             }`}
                     >
                         Dashboard
@@ -83,7 +67,6 @@ const DesktopNav = ({
 
             {/* Right Navigation */}
             <div className="navbar-end hidden items-center gap-5 md:flex">
-
                 {/* Theme Toggle */}
                 <button
                     onClick={handleThemeChange}

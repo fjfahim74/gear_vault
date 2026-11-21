@@ -64,7 +64,7 @@ export default function FeaturedEquipment() {
 
                     <Link
                         href="/equipment"
-                        className="font-semibold text-secondary transition-colors hover:text-accent"
+                        className="font-semibold text-accent transition-opacity hover:opacity-80"
                     >
                         View All Equipment →
                     </Link>

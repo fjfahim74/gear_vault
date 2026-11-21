@@ -197,7 +197,7 @@ export default function EquipmentDetailsClient({ equipmentId }: Props) {
                         </section>
                     </div>
 
-                    <aside className="h-fit rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm lg:sticky lg:top-24">
+                    <aside className="h-fit rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm">
                         <p className="text-3xl font-bold text-base-content">
                             ${equipment.rentalPrice}
                             <span className="text-sm font-normal text-base-content/60">
