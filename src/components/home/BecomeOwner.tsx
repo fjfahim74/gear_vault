@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Check, ArrowRight } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 const benefits = [
     "Free to list",
@@ -8,6 +11,24 @@ const benefits = [
 ];
 
 export default function BecomeOwner() {
+    const { data: session, isPending } = authClient.useSession();
+
+    const role = session?.user?.role;
+
+    const listingHref = !session
+        ? "/sign-up"
+        : role === "Owner"
+            ? "/dashboard/owner/add-equipment"
+            : role === "Admin"
+                ? "/dashboard/admin"
+                : "/dashboard/customer";
+
+    const listingLabel = !session
+        ? "Start Listing"
+        : role === "Owner"
+            ? "Add Equipment"
+            : "Go to Dashboard";
+
     return (
         <section className="bg-base-100 py-20">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -45,10 +66,15 @@ export default function BecomeOwner() {
                         </div>
 
                         <Link
-                            href="/sign-up"
-                            className="mt-9 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-7 py-3.5 font-semibold text-primary-content transition hover:brightness-95 sm:w-auto"
+                            href={isPending ? "/" : listingHref}
+                            onClick={(event) => {
+                                if (isPending) event.preventDefault();
+                            }}
+                            aria-disabled={isPending}
+                            className={`mt-9 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-7 py-3.5 font-semibold text-primary-content transition hover:brightness-95 sm:w-auto ${isPending ? "pointer-events-none opacity-60" : ""
+                                }`}
                         >
-                            Start Listing
+                            {listingLabel}
                             <ArrowRight size={18} />
                         </Link>
                     </div>

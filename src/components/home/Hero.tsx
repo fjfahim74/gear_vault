@@ -10,8 +10,30 @@ import {
     Search,
     ShieldCheck,
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 const Hero = () => {
+
+
+    const { data: session, isPending } = authClient.useSession();
+
+    const role = session?.user?.role;
+
+    const listingHref = !session
+        ? "/sign-up"
+        : role === "Owner"
+            ? "/dashboard/owner/add-equipment"
+            : role === "Admin"
+                ? "/dashboard/admin"
+                : "/dashboard/customer";
+
+    const listingLabel = !session
+        ? "List Your Equipment"
+        : role === "Owner"
+            ? "Add Equipment"
+            : "Go to Dashboard";
+
+
     const shouldReduceMotion = useReducedMotion();
 
     const animation = {
@@ -56,10 +78,15 @@ const Hero = () => {
                         </Link>
 
                         <Link
-                            href="/sign-up"
-                            className="btn h-13 border border-secondary bg-transparent px-6 text-base font-semibold text-secondary hover:bg-secondary/10"
+                            href={isPending ? "/" : listingHref}
+                            onClick={(event) => {
+                                if (isPending) event.preventDefault();
+                            }}
+                            aria-disabled={isPending}
+                            className={`btn h-13 border border-secondary bg-transparent px-6 text-base font-semibold text-secondary hover:bg-secondary/10 ${isPending ? "pointer-events-none opacity-60" : ""
+                                }`}
                         >
-                            List Your Equipment
+                            {listingLabel}
                         </Link>
                     </div>
 
