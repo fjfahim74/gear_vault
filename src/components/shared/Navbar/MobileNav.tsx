@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import UserProfile from "./UserProfile";
+import Link from "next/link";
 
 const MobileNav = ({
     session,
@@ -15,12 +15,6 @@ const MobileNav = ({
     const pathname = usePathname();
 
     const closeMenu = () => setIsMenuOpen(false);
-
-    const getLinkClass = (isActive: boolean) =>
-        `font - medium transition ${isActive
-            ? "font-semibold text-primary"
-            : "text-base-content hover:text-primary"
-        } `;
 
     return (
         <div className="navbar-end md:hidden">
@@ -61,48 +55,6 @@ const MobileNav = ({
 
                     <div className="absolute left-0 top-full z-50 w-full border-t border-base-300 bg-base-100 p-5 shadow-lg">
                         <div className="flex flex-col gap-4">
-                            <Link
-                                href="/"
-                                onClick={closeMenu}
-                                className={getLinkClass(pathname === "/")}
-                            >
-                                Home
-                            </Link>
-
-                            <Link
-                                href="/equipment"
-                                onClick={closeMenu}
-                                className={getLinkClass(pathname.startsWith("/equipment"))}
-                            >
-                                All Equipment
-                            </Link>
-
-                            <Link
-                                href="/how-it-works"
-                                onClick={closeMenu}
-                                className={getLinkClass(pathname === "/how-it-works")}
-                            >
-                                How It Works
-                            </Link>
-
-                            <Link
-                                href="/about"
-                                onClick={closeMenu}
-                                className={getLinkClass(pathname === "/about")}
-                            >
-                                About
-                            </Link>
-
-                            <Link
-                                href="/contact"
-                                onClick={closeMenu}
-                                className={getLinkClass(pathname === "/contact")}
-                            >
-                                Contact
-                            </Link>
-
-                            <div className="my-1 border-t border-base-300" />
-
                             {isPending ? (
                                 <div className="h-5 w-24 animate-pulse rounded bg-base-300" />
                             ) : !session ? (
@@ -124,24 +76,14 @@ const MobileNav = ({
                                     </Link>
                                 </div>
                             ) : (
-                                <>
-                                    <Link
-                                        href="/dashboard"
-                                        onClick={closeMenu}
-                                        className={getLinkClass(pathname.startsWith("/dashboard"))}
-                                    >
-                                        Dashboard
-                                    </Link>
-
-                                    <UserProfile
-                                        user={session.user}
-                                        isOpen={false}
-                                        onToggle={() => { }}
-                                        onClose={closeMenu}
-                                        onSignOut={handleSignOut}
-                                        variant="mobile"
-                                    />
-                                </>
+                                <UserProfile
+                                    user={session.user}
+                                    isOpen={false}
+                                    onToggle={() => { }}
+                                    onClose={closeMenu}
+                                    onSignOut={handleSignOut}
+                                    variant="mobile"
+                                />
                             )}
                         </div>
                     </div>
