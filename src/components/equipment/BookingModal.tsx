@@ -120,7 +120,7 @@ export default function BookingModal({ equipment, onClose }: Props) {
                     equipmentId: equipment._id,
                     startDate,
                     endDate,
-                    quantity: String(quantity),
+                    quantity: "1",
                 });
 
                 const response = await fetch(
@@ -141,7 +141,7 @@ export default function BookingModal({ equipment, onClose }: Props) {
                 if (isActive) {
                     setAvailability(data);
                     setAvailabilityStatus(
-                        data.isAvailable ? "available" : "unavailable"
+                        data.availableQuantity > 0 ? "available" : "unavailable"
                     );
                 }
             } catch (error) {
@@ -157,7 +157,7 @@ export default function BookingModal({ equipment, onClose }: Props) {
             isActive = false;
             clearTimeout(timer);
         };
-    }, [equipment._id, startDate, endDate, quantity]);
+    }, [equipment._id, startDate, endDate]);
 
     // Close modal with Escape key
     useEffect(() => {
@@ -210,7 +210,8 @@ export default function BookingModal({ equipment, onClose }: Props) {
     const canContinue =
         isFormValid &&
         availabilityStatus === "available" &&
-        availability?.isAvailable;
+        availability &&
+        quantity <= availability.availableQuantity;
 
     const handlePayment = async () => {
         try {
@@ -368,7 +369,7 @@ export default function BookingModal({ equipment, onClose }: Props) {
                                     {availabilityStatus === "available" && (
                                         <p className="flex items-center gap-2 text-sm font-medium text-success">
                                             <CheckCircle2 size={18} />
-                                            {availability?.message}
+                                            {availability?.availableQuantity} units available for these dates.
                                         </p>
                                     )}
 
@@ -413,7 +414,12 @@ export default function BookingModal({ equipment, onClose }: Props) {
 
                                 <button
                                     type="button"
-                                    disabled={quantity >= equipment.availableQuantity}
+                                    disabled={
+                                        startDate && endDate
+                                            ? availabilityStatus !== "available" ||
+                                            quantity >= (availability?.availableQuantity ?? 0)
+                                            : quantity >= equipment.availableQuantity
+                                    }
                                     onClick={() =>
                                         setQuantity((previous) => previous + 1)
                                     }
@@ -423,9 +429,24 @@ export default function BookingModal({ equipment, onClose }: Props) {
                                 </button>
 
                                 <span className="text-sm text-base-content/60">
-                                    Max {equipment.availableQuantity} units
+                                    {startDate && endDate
+                                        ? availabilityStatus === "available"
+                                            ? `Max ${availability?.availableQuantity} units for these dates`
+                                            : availabilityStatus === "checking"
+                                                ? "Checking availability..."
+                                                : "Date availability not confirmed"
+                                        : `Total inventory: ${equipment.availableQuantity} units`}
                                 </span>
                             </div>
+
+                            {availabilityStatus === "available" &&
+                                availability &&
+                                quantity > availability.availableQuantity && (
+                                    <p className="mt-2 text-sm text-error">
+                                        Only {availability.availableQuantity} units are available.
+                                        Please reduce the quantity to continue.
+                                    </p>
+                                )}
                         </section>
 
                         {/* Contact Number */}

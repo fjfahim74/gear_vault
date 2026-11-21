@@ -43,7 +43,7 @@ export default function EquipmentCard({ equipment }: EquipmentCardProps) {
                 {quantity !== undefined && quantity <= 0 && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                         <span className="rounded-lg bg-base-100 px-3 py-2 text-sm font-semibold text-error">
-                            Currently Unavailable
+                            No Inventory
                         </span>
                     </div>
                 )}
@@ -80,16 +80,12 @@ export default function EquipmentCard({ equipment }: EquipmentCardProps) {
                         <span
                             className={`rounded-full px-3 py-1 text-xs font-semibold ${quantity <= 0
                                     ? "bg-base-200 text-base-content/60"
-                                    : quantity <= 2
-                                        ? "bg-warning/15 text-warning"
-                                        : "bg-success/15 text-success"
+                                    : "bg-success/15 text-success"
                                 }`}
                         >
                             {quantity <= 0
-                                ? "Unavailable"
-                                : quantity <= 2
-                                    ? `Only ${quantity} left`
-                                    : `${quantity} available`}
+                                ? "No inventory"
+                                : `${quantity} total units`}
                         </span>
                     )}
 

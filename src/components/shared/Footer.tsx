@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import Logo from "./Logo";
 import { FaXTwitter } from "react-icons/fa6";
+import { authClient } from "@/lib/auth-client";
 
 const Footer = () => {
+    const { data: session, isPending } = authClient.useSession();
+
     return (
         <footer className="border-t border-base-300 bg-base-100">
             <div className="mx-auto max-w-7xl px-4 py-12">
@@ -74,13 +79,32 @@ const Footer = () => {
                         </h3>
 
                         <div className="flex flex-col gap-3 text-sm">
-                            <Link href="/sign-in" className="text-base-content/70 transition hover:text-primary">
-                                Login
-                            </Link>
+                            {!isPending && (
+                                session ? (
+                                    <Link
+                                        href="/dashboard"
+                                        className="text-base-content/70 transition hover:text-primary"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                ) : (
+                                    <>
+                                        <Link
+                                            href="/sign-in"
+                                            className="text-base-content/70 transition hover:text-primary"
+                                        >
+                                            Login
+                                        </Link>
 
-                            <Link href="/sign-up" className="text-base-content/70 transition hover:text-primary">
-                                Get Started
-                            </Link>
+                                        <Link
+                                            href="/sign-up"
+                                            className="text-base-content/70 transition hover:text-primary"
+                                        >
+                                            Get Started
+                                        </Link>
+                                    </>
+                                )
+                            )}
                         </div>
 
                         <p className="text-sm leading-relaxed text-base-content/60">

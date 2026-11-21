@@ -216,11 +216,11 @@ const FavoritesClient = () => {
                                         <td>
                                             {item.availableQuantity > 0 ? (
                                                 <span className="badge badge-success">
-                                                    Available
+                                                    {item.availableQuantity} total units
                                                 </span>
                                             ) : (
                                                 <span className="badge badge-error">
-                                                    Unavailable
+                                                    No inventory
                                                 </span>
                                             )}
                                         </td>
@@ -288,11 +288,11 @@ const FavoritesClient = () => {
                                 <div className="mt-3">
                                     {item.availableQuantity > 0 ? (
                                         <span className="badge badge-success">
-                                            Available
+                                            {item.availableQuantity} total units
                                         </span>
                                     ) : (
                                         <span className="badge badge-error">
-                                            Unavailable
+                                            No inventory
                                         </span>
                                     )}
                                 </div>

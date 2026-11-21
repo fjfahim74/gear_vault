@@ -147,7 +147,7 @@ export default function EquipmentDetailsClient({ equipmentId }: Props) {
                                 ["Model", equipment.model],
                                 ["Condition", equipment.condition],
                                 ["Rental Type", equipment.rentalType],
-                                ["Available Quantity", equipment.availableQuantity],
+                                ["Total Inventory", equipment.availableQuantity],
                                 ["Location", equipment.location],
                             ].map(([label, value]) => (
                                 <div
@@ -207,12 +207,17 @@ export default function EquipmentDetailsClient({ equipmentId }: Props) {
 
                         <div className="mt-5 border-t border-base-300 pt-5">
                             <p className="text-sm text-base-content/60">
-                                Availability
+                                Total Inventory
                             </p>
+
                             <p className="mt-2 font-semibold text-base-content">
                                 {equipment.availableQuantity > 0
-                                    ? `${equipment.availableQuantity} units available`
-                                    : "Currently unavailable"}
+                                    ? `${equipment.availableQuantity} units listed`
+                                    : "No inventory listed"}
+                            </p>
+
+                            <p className="mt-1 text-xs text-base-content/50">
+                                Select rental dates to check actual availability.
                             </p>
                         </div>
 
