@@ -17,11 +17,7 @@ const CustomerDashboardPage = async () => {
         redirect(`/dashboard/${role.toLowerCase()}`);
     }
 
-    return (
-        <div>
-            <h1>Customer Dashboard</h1>
-        </div>
-    );
+    redirect("/dashboard/customer/rental");
 };
 
 export default CustomerDashboardPage;

@@ -40,7 +40,6 @@ const ownerLinks = [
 ];
 
 const customerLinks = [
-    { title: "Overview", href: "/dashboard/customer", icon: LayoutDashboard },
     { title: "My Rentals", href: "/dashboard/customer/rental", icon: CalendarDays },
     { title: "My Favorites", href: "/dashboard/customer/favorites", icon: Heart },
     { title: "My Profile", href: "/dashboard/customer/profile", icon: UserCircle }
