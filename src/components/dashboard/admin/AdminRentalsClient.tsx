@@ -367,7 +367,7 @@ const AdminRentalsClient = () => {
 
                                     <td>
                                         <select
-                                            className="select select-bordered select-xs max-sm:appearance-none max-sm:bg-none"
+                                            className="rental-status-select"
                                             value={item.bookingStatus}
                                             onChange={event => {
                                                 setSelectedRental(item);

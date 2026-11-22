@@ -90,3 +90,23 @@ body {
   color: var(--color-base-content);
   font-family: var(--font-inter, Arial, sans-serif);
 }
+
+.rental-status-select {
+  padding: 5px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: white;
+  color: #333;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Hide the dropdown arrow on mobile */
+@media (max-width: 639px) {
+  .rental-status-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: none;
+    padding-right: 10px;
+  }
+}
