@@ -3,15 +3,26 @@ import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 import { jwt } from "better-auth/plugins";
+import { attachDatabasePool } from "@vercel/functions";
 
 const globalForMongo = globalThis as typeof globalThis & {
     mongoClient?: MongoClient;
 };
 
 const client =
-    globalForMongo.mongoClient ?? new MongoClient(process.env.MONGO_DB_URL as string);
+    globalForMongo.mongoClient ??
+    new MongoClient(process.env.MONGO_DB_URL as string, {
+        maxPoolSize: 5,
+        minPoolSize: 0,
+        maxIdleTimeMS: 30000,
+        serverSelectionTimeoutMS: 10000,
+        heartbeatFrequencyMS: 10000,
+    });
 
 globalForMongo.mongoClient = client;
+
+// Keeps the connection pool healthy on Vercel. Remove if you do not use Vercel.
+attachDatabasePool(client);
 
 const db = client.db("next_project");
 
@@ -78,9 +89,6 @@ export const auth = betterAuth({
         },
     },
 
-
-
-    database: mongodbAdapter(db, {
-        client,
-    }),
+    // No "client" here, so Better Auth does not use MongoDB transactions.
+    database: mongodbAdapter(db),
 });
