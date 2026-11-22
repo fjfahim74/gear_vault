@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
+import Logo from "../shared/Logo";
 
 interface DashboardShellProps {
     children: ReactNode;
@@ -159,27 +160,7 @@ const DashboardShellClient = ({
             >
 
                 {/* Logo */}
-                <div className="flex items-center justify-between">
-                    <Link
-                        href={`/dashboard/${role.toLowerCase()}`}
-                        className="flex items-center gap-3"
-                    >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-content">
-                            <Cog size={23} />
-                        </div>
-
-                        <span className="text-2xl font-extrabold">
-                            GearVault
-                        </span>
-                    </Link>
-
-                    <button
-                        onClick={() => setMenuOpen(false)}
-                        className="btn btn-ghost btn-sm lg:hidden"
-                    >
-                        <X size={20} />
-                    </button>
-                </div>
+                <Logo />
 
                 {/* Role */}
                 <div className="mt-8">

@@ -9,7 +9,11 @@ const Logo = () => {
             </div>
 
             <span className="text-xl font-extrabold text-base-content">
-                GearVault
+                Gear
+                <span className="text-amber-500">
+
+                    Vault
+                </span>
             </span>
         </Link>
     );
