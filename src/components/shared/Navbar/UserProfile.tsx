@@ -20,7 +20,7 @@ type UserProfileProps = {
 
 const roleBasedMenuItems = {
     Customer: [
-        { title: "My Rentals", href: "/dashboard/customer/rentals" },
+        { title: "My Rentals", href: "/dashboard/customer/rental" },
         { title: "Favorites", href: "/dashboard/customer/favorites" },
         { title: "Profile", href: "/dashboard/customer/profile" },
     ],
