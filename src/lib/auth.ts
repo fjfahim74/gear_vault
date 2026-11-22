@@ -4,7 +4,15 @@ import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 import { jwt } from "better-auth/plugins";
 
-const client = new MongoClient(process.env.MONGO_DB_URL as string);
+const globalForMongo = globalThis as typeof globalThis & {
+    mongoClient?: MongoClient;
+};
+
+const client =
+    globalForMongo.mongoClient ?? new MongoClient(process.env.MONGO_DB_URL as string);
+
+globalForMongo.mongoClient = client;
+
 const db = client.db("next_project");
 
 export const auth = betterAuth({
