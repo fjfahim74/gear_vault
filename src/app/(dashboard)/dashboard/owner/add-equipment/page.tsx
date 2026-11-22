@@ -319,7 +319,7 @@ const AddEquipmentPage = async () => {
                     <div>
                         <p className="font-semibold">
                             Listing Status:{" "}
-                            <span className="badge badge-warning">
+                            <span className="text-warning">
                                 Pending
                             </span>
                         </p>

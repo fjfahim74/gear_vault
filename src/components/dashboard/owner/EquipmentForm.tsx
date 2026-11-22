@@ -3,12 +3,14 @@
 import { useState, type ReactNode, type FormEvent } from "react";
 import { getTokenFromClient } from "@/lib/getTokenFromClient";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 type EquipmentFormProps = {
     children: ReactNode;
 };
 
 const EquipmentForm = ({ children }: EquipmentFormProps) => {
+    const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -81,6 +83,7 @@ const EquipmentForm = ({ children }: EquipmentFormProps) => {
             }
 
             toast.success("Equipment submitted successfully! Waiting for admin approval.");
+            router.push("/dashboard/owner/equipment");
         } catch (error) {
             console.error("Equipment submission error:", error);
             toast.error(error instanceof Error ? error.message : "Something went wrong.");

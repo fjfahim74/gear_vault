@@ -50,6 +50,7 @@ function addOneDay(date: string) {
 }
 
 export default function BookingModal({ equipment, onClose }: Props) {
+    const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [quantity, setQuantity] = useState(1);
@@ -163,6 +164,11 @@ export default function BookingModal({ equipment, onClose }: Props) {
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
+                if (showDiscardConfirm) {
+                    setShowDiscardConfirm(false);
+                    return;
+                }
+
                 handleClose();
             }
         };
@@ -184,7 +190,8 @@ export default function BookingModal({ equipment, onClose }: Props) {
         additionalNotes;
 
     const handleClose = () => {
-        if (hasFormData && !window.confirm("Discard your booking details?")) {
+        if (hasFormData) {
+            setShowDiscardConfirm(true);
             return;
         }
 
@@ -627,6 +634,46 @@ export default function BookingModal({ equipment, onClose }: Props) {
                     </aside>
                 </div>
             </div>
+            {showDiscardConfirm && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-neutral/60 p-4">
+                    <div
+                        role="alertdialog"
+                        aria-modal="true"
+                        aria-labelledby="discard-title"
+                        className="w-full max-w-md rounded-xl border border-base-300 bg-base-100 p-6 shadow-2xl"
+                    >
+                        <h3
+                            id="discard-title"
+                            className="text-lg font-bold text-base-content"
+                        >
+                            Discard booking details?
+                        </h3>
+
+                        <p className="mt-3 text-sm text-base-content/70">
+                            You have entered some booking information.
+                            Are you sure you want to discard it?
+                        </p>
+
+                        <div className="mt-6 flex justify-end gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setShowDiscardConfirm(false)}
+                                className="btn btn-outline"
+                            >
+                                Keep Editing
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="btn btn-error"
+                            >
+                                Discard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
