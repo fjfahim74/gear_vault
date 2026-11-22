@@ -119,7 +119,7 @@ const Hero = () => {
                         className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-base-300 bg-cover bg-center shadow-lg"
                         style={{
                             backgroundImage:
-                                "url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=85')",
+                                "url('https://images.unsplash.com/photo-1647021038407-fca3bfd3bf0e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D')",
                         }}
                     >
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0F2B46]/40 via-transparent to-transparent" />

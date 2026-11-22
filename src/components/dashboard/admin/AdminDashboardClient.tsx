@@ -210,10 +210,10 @@ const AdminDashboardClient = ({ userName }: { userName: string }) => {
                     const card = (
                         <div className="flex items-center justify-between gap-3">
                             <div>
-                                <p className="text-sm text-base-content/60">
+                                <p className="min-h-10 text-sm text-base-content/60">
                                     {item.title}
                                 </p>
-                                <h2 className="mt-3 text-2xl font-bold">
+                                <h2 className="mt-1 text-2xl font-bold">
                                     {item.value}
                                 </h2>
                             </div>
@@ -364,7 +364,7 @@ const AdminDashboardClient = ({ userName }: { userName: string }) => {
                                 Recent equipment listings.
                             </p>
                         </div>
-                        <span className="badge badge-warning">
+                        <span className="font-semibold text-warning">
                             {analytics.pendingApprovals}
                         </span>
                     </div>

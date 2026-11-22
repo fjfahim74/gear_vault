@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "GearVault | Rent the Right Gear",
+  title: "GearVault",
   description:
     "Rent the right gear. Skip the cost of owning it. Explore equipment and rent from trusted owners with GearVault.",
 };

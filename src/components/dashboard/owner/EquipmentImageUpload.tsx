@@ -5,9 +5,7 @@ import { ImagePlus, X } from "lucide-react";
 
 const EquipmentImageUpload = () => {
     const [imagePreview, setImagePreview] = useState("");
-    const [values, setValues] = useState({
-        image: "",
-    });
+    const [imageUrl, setImageUrl] = useState("");
     const [isUploading, setIsUploading] = useState(false);
 
     const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -15,6 +13,7 @@ const EquipmentImageUpload = () => {
 
         if (!file) return;
 
+        setImageUrl("");
         setImagePreview(URL.createObjectURL(file));
         setIsUploading(true);
 
@@ -35,23 +34,27 @@ const EquipmentImageUpload = () => {
                 throw new Error("Image upload failed.");
             }
 
-            setValues((prev) => ({
-                ...prev,
-                image: result.data.url,
-            }));
+            setImageUrl(result.data.url);
         } catch (error) {
             console.log(error);
             alert("Failed to upload image. Please try again.");
             setImagePreview("");
-            setValues({ image: "" });
+            setImageUrl("");
         } finally {
             setIsUploading(false);
         }
     };
 
+    const handleUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const url = event.target.value;
+
+        setImageUrl(url);
+        setImagePreview(url);
+    };
+
     const clearImage = () => {
         setImagePreview("");
-        setValues({ image: "" });
+        setImageUrl("");
     };
 
     return (
@@ -62,6 +65,7 @@ const EquipmentImageUpload = () => {
                     <img
                         src={imagePreview}
                         alt="Equipment Preview"
+                        onError={() => setImagePreview("")}
                         className="h-48 w-full rounded-lg object-contain"
                     />
 
@@ -89,25 +93,36 @@ const EquipmentImageUpload = () => {
                 />
             </label>
 
+            <div className="divider my-4">OR</div>
+
+            <input
+                type="url"
+                placeholder="Paste image URL here"
+                value={imageUrl}
+                onChange={handleUrlChange}
+                disabled={isUploading}
+                className="input input-bordered w-full max-w-md"
+            />
+
             <p className="mt-3 text-sm text-base-content/50">
                 {isUploading
                     ? "Uploading image..."
-                    : values.image
-                        ? "Image uploaded successfully."
-                        : "Select an image to upload."}
+                    : imageUrl
+                        ? "Image selected successfully."
+                        : "Upload an image or paste an image URL."}
             </p>
 
             <input
                 type="hidden"
                 name="imageUrl"
-                value={values.image}
+                value={imageUrl}
                 readOnly
             />
 
             <input
                 type="hidden"
                 name="imageUploadStatus"
-                value={isUploading ? "uploading" : values.image ? "uploaded" : "empty"}
+                value={isUploading ? "uploading" : imageUrl ? "uploaded" : "empty"}
                 readOnly
             />
         </div>

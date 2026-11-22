@@ -24,11 +24,10 @@ const EquipmentForm = ({ children }: EquipmentFormProps) => {
             return;
         }
 
-        if (imageUploadStatus !== "uploaded" || !imageUrl) {
-            toast.error("Please upload an equipment image.");
+        if (!imageUrl || typeof imageUrl !== "string" || !imageUrl.trim()) {
+            toast.error("Please upload an equipment image or provide an image URL.");
             return;
         }
-
         const rentalPrice = Number(formData.get("price"));
         const availableQuantity = Number(formData.get("quantity"));
 
