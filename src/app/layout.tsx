@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Inter } from "next/font/google";
 import "./globals.css";
-import { ToastContainer } from "react-toastify";
-
-import ConditionalPublicLayout from "@/components/shared/ConditionalPublicLayout";
 import Toaster from "@/components/shared/Toaster";
 
 const manrope = Manrope({
@@ -34,7 +31,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
 
         <Toaster />
-        <ToastContainer />
       </body>
     </html>
   );
