@@ -26,7 +26,10 @@ const Error = ({
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <button onClick={() => router.refresh()}>
+                <button
+                    onClick={() => router.refresh()}
+                    className="btn border-none bg-primary text-primary-content hover:brightness-95"
+                >
                     <RefreshCw className="h-5 w-5" />
                     Try Again
                 </button>
